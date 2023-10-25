@@ -1,11 +1,12 @@
 # CSCE 435 Group project
 
 ## 1. Group members:
-1. First
-2. Second
-3. Third
-4. Fourth
+1. Evan Burriola
+2. Min Zhang
+3. Cole McAnelly
+4. Saddy Khakimova
 
+All communication between team members will be coordinated through Discord.
 ---
 
 ## 2. _due 10/25_ Project topic
