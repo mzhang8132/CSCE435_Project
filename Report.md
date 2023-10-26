@@ -18,17 +18,18 @@ For this project we will be comparing both merge sort and quick sort algorithms.
 
 ### MPI Merge Sort
 
-procedure MERGESORT(A, left, right)
-begin
-    if left < right then
-    begin
-        middle = (left + right) / 2
 
-        MERGESORT(A, left, middle)
-        MERGESORT(A, middle + 1, right)
-        MERGE(A, left, middle, right)
-    end if
-end MERGESORT
+    procedure MERGESORT(A, left, right)
+    begin
+        if left < right then
+        begin
+            middle = (left + right) / 2
+
+            MERGESORT(A, left, middle)
+            MERGESORT(A, middle + 1, right)
+            MERGE(A, left, middle, right)
+        end if
+    end MERGESORT
 
 Steps to be done in main:
 - read in array
@@ -41,34 +42,34 @@ Steps to be done in main:
 
 ### CUDA Merge Sort
 
-procedure MERGESORT(A)
-begin
-    allocate memory
-    Memcpy host to device
-    MERGESORT_STEP<<<blocks, threads>>>(A, j, k)
-    Memcpy device to host
-    free allocated memory
-end MERGESORT
+    procedure MERGESORT(A)
+    begin
+        allocate memory
+        Memcpy host to device
+        MERGESORT_STEP<<<blocks, threads>>>(A, j, k)
+        Memcpy device to host
+        free allocated memory
+    end MERGESORT
 
 ### MPI Quick Sort
 
-procedure QUICKSORT(A, start, end)
-begin
-    if start < end then
+    procedure QUICKSORT(A, start, end)
     begin
-        pivot = A[start]
-        index = start
-        for i = start+1 to end do
-            if A[i] < pivot then
-            begin
-                index = index + 1
-                swap(A[index], A[i])
-            end if
-        swap(A[start], A[index])
-        QUICKSORT(A, start, index)
-        QUICKSORT(A, index + 1, end)
-    end if
-end QUICKSORT
+        if start < end then
+        begin
+            pivot = A[start]
+            index = start
+            for i = start+1 to end do
+                if A[i] < pivot then
+                begin
+                    index = index + 1
+                    swap(A[index], A[i])
+                end if
+            swap(A[start], A[index])
+            QUICKSORT(A, start, index)
+            QUICKSORT(A, index + 1, end)
+        end if
+    end QUICKSORT
 
 Steps to be done in main:
 - read in array
@@ -80,11 +81,11 @@ Steps to be done in main:
 
 ### CUDA Quick Sort
 
-procedure QUICKSORT(A)
-begin
-    allocate memory
-    Memcpy host to device
-    QUICKSORT_STEP<<<blocks, threads>>>(A, j, k)
-    Memcpy device to host
-    free allocated memory
-end QUICKSORT
+    procedure QUICKSORT(A)
+    begin
+        allocate memory
+        Memcpy host to device
+        QUICKSORT_STEP<<<blocks, threads>>>(A, j, k)
+        Memcpy device to host
+        free allocated memory
+    end QUICKSORT
