@@ -53,7 +53,7 @@ void odd_even_sort(float *values, int num_vals, int rank, int num_threads, MPI_C
     
     qsort(local_A, local_n, sizeof(int), Compare);
 
-    for (int phase = 0; phase < p; phase++) {
+    for (int phase = 0; phase < num_threads; phase++) {
         odd_even_iter(values, A, B, num_vals, phase, even_partner, odd_partner, rank, num_threads, comm);
     }
     
