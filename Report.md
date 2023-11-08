@@ -138,11 +138,11 @@ Required code regions:
     - `data_init` - the function where input data is generated or read in from file.
     - `correctness_check` - function for checking the correctness of the algorithm output (e.g., checking if the resulting data is sorted).
     - `comm` - All communication-related functions in your algorithm should be nested under the `comm` region.
-     - Inside the `comm` region, you should create regions to indicate how much data you are communicating (i.e., `comm_small` if you are sending or broadcasting a few values, `comm_large` if you are sending all of your local values).
-     - Notice that auxillary functions like MPI_init are not under here.
+        - Inside the `comm` region, you should create regions to indicate how much data you are communicating (i.e., `comm_small` if you are sending or broadcasting a few values, `comm_large` if you are sending all of your local values).
+        - Notice that auxillary functions like MPI_init are not under here.
     - `comp` - All computation functions within your algorithm should be nested under the `comp` region.
-     - Inside the `comp` region, you should create regions to indicate how much data you are computing on (i.e., `comp_small` if you are sorting a few values like the splitters, `comp_large` if you are sorting values in the array).
-     - Notice that auxillary functions like data_init are not under here.
+        - Inside the `comp` region, you should create regions to indicate how much data you are computing on (i.e., `comp_small` if you are sorting a few values like the splitters, `comp_large` if you are sorting values in the array).
+        - Notice that auxillary functions like data_init are not under here.
 
 All functions will be called from `main` and most will be grouped under either `comm` or `comp` regions, representing communication and computation, respectively. You should be timing as many significant functions in your code as possible. **Do not** time print statements or other insignificant operations that may skew the performance measurements.
 
