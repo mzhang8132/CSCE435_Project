@@ -24,8 +24,10 @@ num_vals=$2
 option=$1
 #
 module load CUDA                #load CUDA module
+module load intel/2020b
 module load GCCcore/7.3.0
 #
 
-CALI_CONFIG="spot(output=${num_threads}-${num_vals}-${option}.cali)" \
+CALI_CONFIG="spot(output=${num_threads}-${num_vals}-${option}.cali)", \
+    cuda.gputime" \
 ./odd_even $num_threads $num_vals $option

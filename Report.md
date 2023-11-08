@@ -14,92 +14,57 @@ All communication between team members will be coordinated through Discord.
 
 ### 2a. Brief project description (what algorithms will you be comparing and on what architectures)
 
-For this project we will be comparing both merge sort and quick sort algorithms. Each sorting algorithm will be implemented using both CUDA and MPI across different number of threads in order to compare their parallel performances against their respective sequential versions. 
+For this project we will be comparing the following sorting algortithms:
 
-### MPI Merge Sort
+- Merge sort
+- Quick sort
+- Bitonic sort
+- Odd even sort
 
-
-    procedure MERGESORT(A, left, right)
-    begin
-        if left < right then
-        begin
-            middle = (left + right) / 2
-
-            MERGESORT(A, left, middle)
-            MERGESORT(A, middle + 1, right)
-            MERGE(A, left, middle, right)
-        end if
-    end MERGESORT
-
-Steps to be done in main:
-- read in array
-- initialize MPI
-- split array into chunks for each thread
-- send array chunk to each corresponding thread
-- do merge sort on each thread
-- gather all sorted chunks from each thread
-- have one thread perform one last merge sort
-
-### CUDA Merge Sort
-
-    procedure MERGESORT(A)
-    begin
-        allocate memory
-        Memcpy host to device
-        MERGESORT_STEP<<<blocks, threads>>>(A, j, k)
-        Memcpy device to host
-        free allocated memory
-    end MERGESORT
-
-### MPI Quick Sort
-
-    procedure QUICKSORT(A, start, end)
-    begin
-        if start < end then
-        begin
-            pivot = A[start]
-            index = start
-            for i = start+1 to end do
-                if A[i] < pivot then
-                begin
-                    index = index + 1
-                    swap(A[index], A[i])
-                end if
-            swap(A[start], A[index])
-            QUICKSORT(A, start, index)
-            QUICKSORT(A, index + 1, end)
-        end if
-    end QUICKSORT
-
-Steps to be done in main:
-- read in array
-- initialize MPI
-- split array into chunks for each thread
-- send array chunk to each corresponding thread
-- do quicksort on each thread
-- pair up the resulting sorted chunks and continute to run quicksort until the entire array is sorted and recombined
-
-### CUDA Quick Sort
-
-    procedure QUICKSORT(A)
-    begin
-        allocate memory
-        Memcpy host to device
-        QUICKSORT_STEP<<<blocks, threads>>>(A, j, k)
-        Memcpy device to host
-        free allocated memory
-    end QUICKSORT
+Each sorting algorithm will be implemented two ways: MPI and CUDA
 
 ### 2b. Pseudocode for each parallel algorithm
 - For MPI programs, include MPI calls you will use to coordinate between processes
 - For CUDA programs, indicate which computation will be performed in a CUDA kernel,
   and where you will transfer data to/from GPU
 
+**MPI Merge Sort**
+
+**CUDA Merge Sort**
+
+**MPI Quick Sort**
+
+**CUDA Quick Sort**
+
+**MPI Bitonic Sort**
+
+**CUDA Bitonic Sort**
+
+**MPI Odd Even Sort**
+
+
+
+**CUDA Odd Even Sort**
+
+    int main()
+        create unsorted array
+
+        cudaMalloc to allocate memory for array
+
+        cudaMemcpy to transfer array to GPU
+
+        for (int i = 0; i < NUM_VALS; i++) {
+            odd_even_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+        }
+
+        check if the array is sorted
+
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types
 - Strong scaling (same problem size, increase number of processors/nodes)
 - Weak scaling (increase problem size, increase number of processors)
 - Number of threads in a block on the GPU 
+
 
 
 ## 3. Project implementation
