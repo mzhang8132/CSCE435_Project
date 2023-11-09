@@ -1,12 +1,12 @@
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstring>
 
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 
-int THREADS;
 int NUM_VALS;
 int OPTION;
 
@@ -23,69 +23,18 @@ void array_fill(float *arr, int length, int offset, int option) {
             arr[i] = random_float();
         }
     } else if (option == 2) {
-        for (int i = offset; i < offset+length; ++i) {
-            arr[i] = (float)i;
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)offset+i;
         }
     } else if (option == 3) {
-        for (int i = offset; i < offset+length; ++i) {
+        for (int i = 0; i < length; ++i) {
             arr[i] = (float)offset+length-1-i;
         }
     }
 }
 
-void odd_even_sort(float *values, int num_vals, int rank, int num_threads, MPI_Comm comm) {
-    int even_partner;
-    int odd_partner;
-
-    int *A = (int*) malloc(num_vals*sizeof(int));
-    int *B = (int*) malloc(num_vals*sizeof(int));
-
-    if (rank % 2 != 0) {   /* odd rank */
-        even_partner = rank - 1;
-        odd_partner = rank + 1;
-        if (odd_partner == p) odd_partner = MPI_PROC_NULL;  // Idle during odd phase
-    } else {                   /* even rank */
-        even_partner = rank + 1;
-        if (even_partner == p) even_partner = MPI_PROC_NULL;  // Idle during even phase
-        odd_partner = rank-1;
-    }
-
-    
-    qsort(local_A, local_n, sizeof(int), Compare);
-
-    for (int phase = 0; phase < num_threads; phase++) {
-        odd_even_iter(values, A, B, num_vals, phase, even_partner, odd_partner, rank, num_threads, comm);
-    }
-    
-    // deallocate memory
-    free(temp_B);
-    free(temp_C);
-}
-
-void odd_even_iter(float *values, float *A, float *B, int num_vals, int phase, int even_partner, int odd_partner, int rank, int num_threads, MPI_Comm comm) {
-   MPI_Status status;
-
-   if (phase % 2 == 0) {  /* Even phase, odd process <-> rank-1 */
-      if (even_partner >= 0) {
-         MPI_Sendrecv(values, num_vals, MPI_FLOAT, even_partner, 0, 
-            A, num_vals, MPI_FLOAT, even_partner, 0, comm,
-            &status);
-         if (rank % 2 != 0)
-            merge_high(values, A, B, num_vals);
-         else
-            merge_low(values, temp_B, temp_C, num_vals);
-      }
-   } else { /* Odd phase, odd process <-> rank+1 */
-      if (odd_partner >= 0) {
-         MPI_Sendrecv(values, num_vals, MPI_FLOAT, odd_partner, 0, 
-            A, num_vals, MPI_FLOAT, odd_partner, 0, comm,
-            &status);
-         if (rank % 2 != 0)
-            merge_low(values, A, B, num_vals);
-         else
-            merge_high(values, A, B, num_vals);
-      }
-   }
+int Compare(const void* a, const void* b) {
+    return ( *(int*)a - *(int*)b );
 }
 
 void merge_low(float *values, float *A, float *B, int num_vals) {
@@ -125,7 +74,58 @@ void merge_high(float *values, float *A, float *B, int num_vals) {
       }
    }
 
-   memcpy(local_A, temp_C, local_n*sizeof(int));
+   memcpy(values, B, num_vals*sizeof(float));
+}
+
+void odd_even_iter(float *values, float *A, float *B, int num_vals, int phase, int even_partner, int odd_partner, int rank, int num_threads, MPI_Comm comm) {
+   MPI_Status status;
+
+   if (phase % 2 == 0) {
+      if (even_partner >= 0) {
+         MPI_Sendrecv(values, num_vals, MPI_FLOAT, even_partner, 0, A, num_vals, MPI_FLOAT, even_partner, 0, comm, &status);
+         if (rank % 2 != 0)
+            merge_high(values, A, B, num_vals);
+         else
+            merge_low(values, A, B, num_vals);
+      }
+   } else {
+      if (odd_partner >= 0) {
+         MPI_Sendrecv(values, num_vals, MPI_FLOAT, odd_partner, 0, A, num_vals, MPI_FLOAT, odd_partner, 0, comm, &status);
+         if (rank % 2 != 0)
+            merge_low(values, A, B, num_vals);
+         else
+            merge_high(values, A, B, num_vals);
+      }
+   }
+}
+
+void odd_even_sort(float *values, int num_vals, int rank, int num_threads, MPI_Comm comm) {
+    int even_partner;
+    int odd_partner;
+
+    float *A = (float*) malloc(num_vals*sizeof(float));
+    float *B = (float*) malloc(num_vals*sizeof(float));
+
+    if (rank % 2 != 0) {   /* odd rank */
+        even_partner = rank - 1;
+        odd_partner = rank + 1;
+        if (odd_partner == num_threads) odd_partner = MPI_PROC_NULL;  // Idle during odd phase
+    } else {                   /* even rank */
+        even_partner = rank + 1;
+        if (even_partner == num_threads) even_partner = MPI_PROC_NULL;  // Idle during even phase
+        odd_partner = rank-1;
+    }
+
+    
+    qsort(values, num_vals, sizeof(int), Compare);
+
+    for (int phase = 0; phase < num_threads; phase++) {
+        odd_even_iter(values, A, B, num_vals, phase, even_partner, odd_partner, rank, num_threads, comm);
+    }
+    
+    // deallocate memory
+    free(A);
+    free(B);
 }
 
 void assign(float* values, float* arr, int offset, int rank) {
@@ -134,14 +134,22 @@ void assign(float* values, float* arr, int offset, int rank) {
     }
 }
 
+int check(float* values, int length) {
+    for (int i = 1; i < length; ++i) {
+        if (values[i] < values[i -1]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 int main (int argc, char *argv[]) {
     CALI_CXX_MARK_FUNCTION;
 
     int	numtasks, taskid;
-
-    THREADS = atoi(argv[1]);
-    NUM_VALS = atoi(argv[2]);
-    OPTION = atoi(argv[3]);
+    
+    NUM_VALS = atoi(argv[1]);
+    OPTION = atoi(argv[2]);
 
     MPI_Status status;
 
@@ -152,7 +160,7 @@ int main (int argc, char *argv[]) {
     cali::ConfigManager mgr;
     mgr.start();
 
-    int offset = NUM_VALS / THREADS;
+    int offset = NUM_VALS / numtasks;
 
     float *values = (float*) malloc(offset * sizeof(float));
 
@@ -160,10 +168,10 @@ int main (int argc, char *argv[]) {
     CALI_MARK_BEGIN("data_init");
     array_fill(values, offset, offset*taskid, OPTION);
     CALI_MARK_END("data_init");
-    
+
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    odd_even_sort(values, offset, taskid, THREADS, MPI_COMM_WORLD);
+    odd_even_sort(values, offset, taskid, numtasks, MPI_COMM_WORLD);
     CALI_MARK_END("comp_large");
     CALI_MARK_END("comp");
 
@@ -171,12 +179,12 @@ int main (int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
-    if (my_rank == 0) {
+    if (taskid == 0) {
         global_list = (float*) malloc( NUM_VALS * sizeof(float));
         assign(global_list, values, offset, 0);
         float *temp = (float*) malloc(offset * sizeof(float));
-        for (int rank = 1; rank < THREADS; rank++) {
-            MPI_Recv(temp, offset, MPI_FLOAT, rank, 0, comm, &status);
+        for (int rank = 1; rank < numtasks; rank++) {
+            MPI_Recv(temp, offset, MPI_FLOAT, rank, 0, MPI_COMM_WORLD, &status);
             assign(global_list, temp, offset, rank);
         }
         free(temp);
@@ -186,9 +194,9 @@ int main (int argc, char *argv[]) {
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
-    if (my_rank == 0) {
+    if (taskid == 0) {
         CALI_MARK_BEGIN("correctness_check");
-        int correctness = check(global_list, NUM_VALS)
+        int correctness = check(global_list, NUM_VALS);
         CALI_MARK_END("correctness_check");
     
         adiak::init(NULL);
