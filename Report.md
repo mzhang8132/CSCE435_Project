@@ -83,6 +83,7 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
         check if the array is sorted
 
 **MPI Bitonic Sort**
+
     void compareExchange(float *values, int length, 
 		     int node1, int node2, int biggerFirst,
 		     int sequenceNo)
@@ -133,6 +134,7 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
         check if the array is sorted
 
 **CUDA Bitonic Sort**
+
     int main()
         create unsorted array
 
