@@ -39,9 +39,9 @@ Evan Burriola
 #include <time.h>
 #include "mpi.h"
 
-// #include <caliper/cali.h>
-// #include <caliper/cali-manager.h>
-// #include <adiak.hpp>
+#include <caliper/cali.h>
+#include <caliper/cali-manager.h>
+#include <adiak.hpp>
 
 int NUM_VALS;
 int OPTION;
