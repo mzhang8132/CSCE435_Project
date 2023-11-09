@@ -30,6 +30,22 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 
 **MPI Merge Sort**
 
+```cpp
+// 1. Split unsorted array into smaller unsorted portions using scatter
+MPI_Scatter(globalArray, localArraySize, MPI_INT, localArray, localArraySize, MPI_INT, 0, MPI_COMM_WORLD);
+
+// 2. Sort the smaller sublists using any sorting algorithm
+std::sort(&arr[0], &arr[len - 1]);
+
+// 3. Merge the sorted sublists
+//  3a. by sending the sublist to a parent process
+MPI_Send(half1, size, MPI_INT, parent, 0, MPI_COMM_WORLD);
+//  3b. and by Receiving said sublist from a child and merging them with the parent's list
+MPI_Recv(half2, size, MPI_INT, rightChild, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+// 4. Repeat step 3 until the whole tree is traversed
+```
+
 **CUDA Merge Sort**
 
 ```cpp
