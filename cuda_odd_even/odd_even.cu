@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     CALI_MARK_END("comm");
 
     CALI_MARK_BEGIN("correctness_check");
-    int correctness = check(values, NUM_VALS)
+    int correctness = check(values, NUM_VALS);
     CALI_MARK_END("correctness_check");
 
     cudaFree(dev_values);
