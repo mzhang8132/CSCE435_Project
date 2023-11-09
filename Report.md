@@ -32,6 +32,22 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 
 **CUDA Merge Sort**
 
+```cpp
+int main()
+// create unsorted array
+
+// cudaMalloc to allocate VRAM for array
+
+// cudaMemcpy to transfer array to VRAM from RAM
+
+// Kernel code will divide the array, and sort into a new "result" array
+MergeSort<<<blocks, threads, sizeof(int) * len*2>>>(values, result, len);
+
+// cudaMemcpy to transfer array from VRAM to RAM
+
+// check if the array is sorted
+```
+
 **MPI Quick Sort**
 
     void swap(float *x, float *y):
