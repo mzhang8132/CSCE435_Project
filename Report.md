@@ -42,7 +42,21 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 
 **MPI Odd Even Sort**
 
+    int main(&argc,&argv)
+        MPI_Init(&argc,&argv);
+        MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
+        MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
+        each thread generates sublists
+
+        odd_even_sort(values, offset, taskid, numtasks, MPI_COMM_WORLD)
+
+        if taskid == 0
+            MPI_Recv sorted sublist from all other threads
+        else
+            MPI_Send sorted sublist to master thread
+
+        check if the array is sorted
 
 **CUDA Odd Even Sort**
 
@@ -65,7 +79,7 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 - Weak scaling (increase problem size, increase number of processors)
 - Number of threads in a block on the GPU 
 
-
+We plan to test our sorting algorithms on 64, 128, and 256, 1024 threads with input of 2^12^, 2^16^, 2^20^, and 2^24^ floats. This will allow us to see the effect of strong scaling by see how the different thread counts across each of the varying input sizes affect performance and weak scaling by seeing how the differnt input sizes across each of the varying thread counts affect performace. In addition for CUDA implementations, the block size is defined as the input size divided by the number of threads.
 
 ## 3. Project implementation
 Implement your proposed algorithms, and test them starting on a small scale.

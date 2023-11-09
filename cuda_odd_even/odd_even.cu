@@ -39,7 +39,7 @@ void array_fill(float *arr, int length, int option) {
 
 int check(float* values, int length) {
     for (int i = 1; i < length; ++i) {
-        if (values[i] > values[i -1]) {
+        if (values[i] < values[i -1]) {
             return 0;
         }
     }

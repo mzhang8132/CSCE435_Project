@@ -18,7 +18,7 @@ float random_float() {
 
 void array_fill(float *arr, int length, int offset, int option) {
     if (option == 1) {
-        srand(0);
+        srand(offset);
         for (int i = 0; i < length; ++i) {
             arr[i] = random_float();
         }
