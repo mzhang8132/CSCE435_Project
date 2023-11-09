@@ -1,15 +1,21 @@
 cmake_minimum_required(VERSION 3.12)
 
+project(quicksort LANGUAGES CUDA CXX)
+
+find_package(MPI REQUIRED)
 find_package(caliper REQUIRED)
 find_package(adiak REQUIRED)
 
-find_package(OpenMP REQUIRED)
-set (CMAKE_CXX_FLAGS "-O -fopenmp")
+add_executable(quicksort quicksort.cu)
 
-add_executable(quicksort quicksort.cpp)
-target_link_libraries(quicksort PRIVATE caliper)
-
+message(STATUS "MPI includes : ${MPI_INCLUDE_PATH}")
+message(STATUS "CUDA includes : ${CUDA_INCLUDE_DIRS}")
 message(STATUS "Caliper includes : ${caliper_INCLUDE_DIR}")
 message(STATUS "Adiak includes : ${adiak_INCLUDE_DIRS}")
+include_directories(SYSTEM ${MPI_INCLUDE_PATH})
+include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${caliper_INCLUDE_DIR})
 include_directories(${adiak_INCLUDE_DIRS})
+
+target_link_libraries(quicksort PRIVATE MPI::MPI_CXX)
+target_link_libraries(quicksort PRIVATE caliper)

@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
     THREADS = atoi(argv[1]);
     NUM_VALS = atoi(argv[2]);
     OPTION = atoi(argv[3]);
-    BLOCKS = (NUM_VALS + THREADS - 1) / THREADS;
+    BLOCKS = NUM_VALS / THREADS;
 
     size_t size = NUM_VALS * sizeof(float);
 

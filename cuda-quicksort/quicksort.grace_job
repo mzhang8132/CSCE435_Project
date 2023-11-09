@@ -28,5 +28,6 @@ module load CUDA                #load CUDA module
 module load GCCcore/7.3.0
 #
 
-CALI_CONFIG="spot(output=${num_threads}-${num_vals}.cali)" \
+CALI_CONFIG="spot(output=${num_threads}-${num_vals}-${option}.cali)", \
+    cuda.gputime" \
 ./quicksort $num_threads $num_vals $option
