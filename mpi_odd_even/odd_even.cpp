@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
     cali::ConfigManager mgr;
-    mgr.start();
+    mgr.start(); 
 
     int offset = NUM_VALS / numtasks;
 
@@ -198,7 +198,7 @@ int main (int argc, char *argv[]) {
         CALI_MARK_BEGIN("correctness_check");
         int correctness = check(global_list, NUM_VALS);
         CALI_MARK_END("correctness_check");
-    
+
         adiak::init(NULL);
         adiak::launchdate();    // launch date of the job
         adiak::libraries();     // Libraries used
