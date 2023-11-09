@@ -37,8 +37,68 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 **CUDA Quick Sort**
 
 **MPI Bitonic Sort**
+    void compareExchange(float *values, int length, 
+		     int node1, int node2, int biggerFirst,
+		     int sequenceNo)
+
+        memcpy(tempArray, numbers, length*sizeof(float));     
+
+        get numbers from the other node. 
+        have the process that is node1 always send first, and node2 receive first
+        --prevent deadlock
+
+        NODE1:
+            MPI_Send(numbers, length, MPI_FLOAT, nodeFrom, sequenceNo, MPI_COMM_WORLD);
+
+            MPI_Recv(&tempArray[length], length, MPI_FLOAT, nodeFrom, sequenceNo, 
+	        MPI_COMM_WORLD, &status);
+        NODE2 
+            MPI_Recv(&tempArray[length], length, MPI_FLOAT, nodeFrom, sequenceNo, 
+	        MPI_COMM_WORLD, &status);
+
+            MPI_Send(numbers, length, MPI_FLOAT, nodeFrom, sequenceNo, MPI_COMM_WORLD);
+  
+        sort ascending/descending 
+
+        keep only respective half
+
+
+    void bitonic_sort(values, length)
+
+        bitonically dispatch comparisions between 'nodes'
+
+            compareExchange(float *values, int length, 
+		     int node1, int node2, int biggerFirst,
+		     int sequenceNo);
+
+
+    int main(&argc,&argv)
+        MPI_Init(&argc,&argv);
+        MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
+        MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
+
+        each process generates sublist
+
+        bitonic_sort(values,length)
+
+        //Gather all values into the global array
+        MPI_Gather()
+
+        check if the array is sorted
 
 **CUDA Bitonic Sort**
+    int main()
+        create unsorted array
+
+        cudaMalloc to allocate memory for array
+
+        cudaMemcpy to transfer array to GPU
+
+        for (int i = 0; i < NUM_VALS; i++) {
+            bitonic_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+        }
+
+        check if the array is sorted
 
 **MPI Odd Even Sort**
 
