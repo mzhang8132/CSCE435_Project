@@ -151,10 +151,9 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    // for (int i = 0; i < NUM_VALS; i++) {
-    //     quicksort<<<BLOCKS, THREADS>>>(dev_values, i, NUM_VALS);
-    // }
-    quicksort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+    for (int i = 0; i < NUM_VALS; i++) {
+        quicksort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+    }
     cudaDeviceSynchronize();
     CALI_MARK_END("comp_large");
     CALI_MARK_END("comp");

@@ -34,7 +34,53 @@ Each sorting algorithm will be implemented two ways: MPI and CUDA
 
 **MPI Quick Sort**
 
+    void swap(float *x, float *y):
+        swap two elements in the array
+
+    int partition(float *values, int left, int right):
+        partition the array and return the new pivot index
+    
+    void quicksort(float *values, int left, int right):
+        sorts portions of the array between two indices recursively using the quickSort algorithm.
+
+    void quicksort_recursive(float *arr, int left, int right, int currProcRank, int maxRank, int rankIndex):
+        handle the recursive sorting and the distribution of work across MPI processes
+
+    int main(&argc,&argv)
+        MPI_Init(&argc,&argv);
+        MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
+        MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
+
+        each process generates sublist
+
+        perform parallel Quicksort on MPI:
+        quicksort_recursive(values, 0, offset - 1, taskid, numtasks - 1, rankPower);
+
+        if taskid == 0:
+            collect all sublists into the global array
+        else:
+            send sorted sublist to the root process
+
+        check if the array is sorted
+
 **CUDA Quick Sort**
+    int main()
+        create unsorted array
+
+        cudaMalloc to allocate memory for array on the GPU
+
+        cudaMemcpy to transfer array to GPU
+
+        perform QuickSort on the GPU
+        for (int i = 0; i < NUM_VALS; i++) {
+            quicksort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+        }
+
+        cudaDeviceSynchronize to synchronize the device
+
+        cudaMemcpy to transfer sorted array from GPU to host
+
+        check if the array is sorted
 
 **MPI Bitonic Sort**
     void compareExchange(float *values, int length, 
