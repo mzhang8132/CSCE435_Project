@@ -6,10 +6,16 @@
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 
-// source: https://github.com/saigowri/CUDA/blob/master/quicksort.cu
-// source: https://medium.com/swlh/revisiting-quicksort-with-julia-and-cuda-2a997447939b 
-// source: https://forums.developer.nvidia.com/t/quick-sort-depth/35100
-// soucre: https://codepal.ai/code-generator/query/ek4N3nrB/function-in-c-iterative-quicksort-with-cuda
+/*
+a list of sources:
+- (main) https://github.com/saigowri/CUDA/blob/master/quicksort.cu
+- https://digitalcommons.providence.edu/student_scholarship/7/ 
+- https://medium.com/swlh/revisiting-quicksort-with-julia-and-cuda-2a997447939b 
+- source: https://forums.developer.nvidia.com/t/quick-sort-depth/35100
+- soucre: https://codepal.ai/code-generator/query/ek4N3nrB/function-in-c-iterative-quicksort-with-cuda
+- https://chat.openai.com/
+*/
+
 
 #include <cuda_runtime.h>
 #include <cuda.h>
@@ -179,10 +185,9 @@ int main(int argc, char *argv[]) {
     adiak::value("num_threads", THREADS); // The number of CUDA or OpenMP threads
     adiak::value("num_blocks", BLOCKS); // The number of CUDA blocks 
     adiak::value("group_num", 5); // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "Online and Handwritten"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+    adiak::value("implementation_source", "Online, Handwritten, and AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
     adiak::value("correctness", correctness); // Whether the dataset has been sorted (0, 1)
 
-    // Flush Caliper output
     mgr.stop();
     mgr.flush();
 }
