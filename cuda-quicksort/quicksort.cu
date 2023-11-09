@@ -13,7 +13,6 @@ a list of sources:
 - https://medium.com/swlh/revisiting-quicksort-with-julia-and-cuda-2a997447939b 
 - source: https://forums.developer.nvidia.com/t/quick-sort-depth/35100
 - soucre: https://codepal.ai/code-generator/query/ek4N3nrB/function-in-c-iterative-quicksort-with-cuda
-- https://chat.openai.com/
 */
 
 

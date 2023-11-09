@@ -13,7 +13,6 @@ a list of sources:
 - (main one) https://github.com/triasamo1/Quicksort-Parallel-MPI/blob/master/quicksort_mpi.c
 https://www.geeksforgeeks.org/implementation-of-quick-sort-using-mpi-omp-and-posix-thread/#
 - https://www.codeproject.com/KB/threads/Parallel_Quicksort/Parallel_Quick_sort_without_merge.pdf
-- https://chat.openai.com/
 */
 
 int NUM_VALS;
