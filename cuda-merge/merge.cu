@@ -24,7 +24,7 @@ void recordAdiak(const char* dt, int dt_size, int len, int op, int threads, int 
   adiak::value("num_blocks", blocks); // The number of CUDA blocks 
   adiak::value("group_num", 5); // The number of your group (integer, e.g., 1, 10)
   adiak::value("implementation_source", "Online and Handwritten"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
-  adiak::value("correctness", sorted); // Whether the dataset has been sorted (0, 1)
+  adiak::value("correctness", int(sorted)); // Whether the dataset has been sorted (0, 1)
 
 }
 
@@ -109,7 +109,7 @@ milliseconds_t sort(T* values, T* result, int* kcalls, int len, int threads, int
 template<typename T>
 int run(int threads, int len, int option)
 {
-  char* datatype;
+  char const* datatype;
   int blocks  = len / threads;
   printf("Number of threads: %d\n", threads);  // THREADS = 256; 
   printf("Number of values: %d\n", len);  // NUM_VALS = 1024;
