@@ -181,7 +181,7 @@ void mergeBitonic(float *numbers, int howMany) {
 }
 
 int main(int argc, char *argv[]) {
-//   CALI_CXX_MARK_FUNCTION;
+  CALI_CXX_MARK_FUNCTION;
   int howMany;
   long int returnVal;
   int len;
