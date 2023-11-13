@@ -224,10 +224,12 @@ int main(int argc, char *argv[]) {
 
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
+  CALI_MARK_BEGIN("MPI_Gather");
   //Gather all values into the global array
   MPI_Gather(numbers, howMany, MPI_FLOAT, 
 	     allNumbers, howMany, MPI_FLOAT, 
 	     0, MPI_COMM_WORLD);
+  CALI_MARK_END("MPI_Gather");
   CALI_MARK_END("comm_large");
   CALI_MARK_END("comm");
   
