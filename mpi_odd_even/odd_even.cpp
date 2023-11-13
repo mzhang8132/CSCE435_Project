@@ -10,7 +10,7 @@
 int NUM_VALS;
 int OPTION;
 
-const char* options[3] = {"random", "sorted", "reverse_sorted"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
@@ -29,6 +29,17 @@ void array_fill(float *arr, int length, int offset, int option) {
     } else if (option == 3) {
         for (int i = 0; i < length; ++i) {
             arr[i] = (float)offset+length-1-i;
+        }
+    } else if (option == 4) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)i;
+        }
+
+        int perturb_count = length / 100;
+        srand(offset);
+        for (int i = 0; i < perturb_count; ++i) {
+            int index = rand() % length;
+            arr[index] = random_float();
         }
     }
 }
@@ -188,6 +199,7 @@ int main (int argc, char *argv[]) {
             assign(global_list, temp, offset, rank);
         }
         free(temp);
+
     } else {
         MPI_Send(values, offset, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
     }

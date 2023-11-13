@@ -14,7 +14,7 @@ int BLOCKS;
 int NUM_VALS;
 int OPTION;
 
-const char* options[3] = {"random", "sorted", "reverse_sorted"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
@@ -34,6 +34,17 @@ void array_fill(float *arr, int length, int option) {
         for (int i = 0; i < length; ++i) {
             arr[i] = (float)length-1-i;
         }
+    } else if (option == 4) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)i;
+        }
+
+        int perturb_count = length / 100;
+        srand(0);
+        for (int i = 0; i < perturb_count; ++i) {
+            int index = rand() % length;
+            arr[index] = random_float();
+        }
     }
 }
 
@@ -46,23 +57,22 @@ int check(float* values, int length) {
     return 1;
 }
 
-__global__ void odd_even_sort(float *values, int j, int num_vals) {
-    int i = blockIdx.x;
+__global__ void odd_even_sort(float *values, int num_vals) {
+    int i = threadIdx.x + blockDim.x * blockIdx.x;
+    int stride = blockDim.x * gridDim.x;
 
-    if (j % 2 == 0 && ((i*2+1) < num_vals)) {
-		if (values[i*2] > values[i*2+1]) {
-			float temp = values[i*2];
-			values[i*2] = values[i*2+1];
-			values[i*2+1] = temp;
-		}
-	}
-	if (j % 2 == 1 && ((i*2+2) < num_vals)) {
-		if (values[i*2+1] > values[i*2+2]) {
-			float temp = values[i*2+1];
-			values[i*2+1] = values[i*2+2];
-			values[i*2+2] = temp;
-		}
-	}
+    for (int j = 0; j < num_vals; ++j) {
+        int index = j % 2;
+
+        for (int k = i + index; k < num_vals - 1; k += stride * 2) {
+            if ((k % 2 == 0 && values[k] > values[k + 1]) || (k % 2 == 1 && k + 1 < num_vals && values[k] > values[k + 1])) {
+                float temp = values[k];
+                values[k] = values[k + 1];
+                values[k + 1] = temp;
+            }
+        }
+        __syncthreads();
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -96,8 +106,8 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    for (int i = 0; i < NUM_VALS; i++) {
-        odd_even_sort<<<BLOCKS, THREADS>>>(dev_values, i, NUM_VALS);
+    for (int i = 0; i < NUM_VALS/2; i++) {
+        odd_even_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
     }
     cudaDeviceSynchronize();
     CALI_MARK_END("comp_large");
