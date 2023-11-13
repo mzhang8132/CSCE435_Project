@@ -375,7 +375,7 @@ For inputTypes:
 
 num_procs, num_threads:
 - MPI: num_procs:
-    - 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
+    - 2, 64, 128, 256, 512, 1024
 - CUDA: num_threads:
     - 64, 128, 256, 512, 1024, 2048, 4096
 
