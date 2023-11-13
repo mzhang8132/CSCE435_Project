@@ -1,0 +1,15 @@
+Filling array with option:1
+localArray after std::sort()localArray after std::sort()	ID:1
+{ 5, 7,}
+Process #1 of 4 on c129.cluster took 0.000398 seconds 
+	ID:0
+{ 3, 6,}
+localArray after std::sort()	ID:3
+{ 2, 6,}
+Process #3 of 4 on c129.cluster took 0.000401 seconds 
+localArray after std::sort()	ID:2
+{ 3, 5,}
+Process #2 of 4 on c129.cluster took 0.000398 seconds 
+Process #0 of 4 on c129.cluster took 0.048573 seconds 
+Sorting 8 integers took 0.048628 seconds 
+SORTED
