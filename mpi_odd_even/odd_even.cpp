@@ -195,13 +195,17 @@ int main (int argc, char *argv[]) {
         assign(global_list, values, offset, 0);
         float *temp = (float*) malloc(offset * sizeof(float));
         for (int rank = 1; rank < numtasks; rank++) {
+            CALI_MARK_BEGIN("MPI_Recv");
             MPI_Recv(temp, offset, MPI_FLOAT, rank, 0, MPI_COMM_WORLD, &status);
+            CALI_MARK_END("MPI_Recv");
             assign(global_list, temp, offset, rank);
         }
         free(temp);
 
     } else {
+        CALI_MARK_BEGIN("MPI_Send");
         MPI_Send(values, offset, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
+        CALI_MARK_END("MPI_Send");
     }
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");

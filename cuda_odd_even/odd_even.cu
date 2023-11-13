@@ -100,7 +100,9 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(dev_values, values, size, cudaMemcpyHostToDevice);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
@@ -115,7 +117,9 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(values, dev_values, size, cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
