@@ -211,8 +211,9 @@ int main(int argc, char *argv[]) {
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_large");
   mergeBitonic(numbers, howMany);
-  CALI_MARK_END("comp");
   CALI_MARK_END("comp_large");
+  CALI_MARK_END("comp");
+  
 //   printNumbers(numbers, howMany);
 
   // they are all sorted, now just gather them up.
@@ -227,13 +228,14 @@ int main(int argc, char *argv[]) {
   MPI_Gather(numbers, howMany, MPI_FLOAT, 
 	     allNumbers, howMany, MPI_FLOAT, 
 	     0, MPI_COMM_WORLD);
-  CALI_MARK_END("comm");
   CALI_MARK_END("comm_large");
+  CALI_MARK_END("comm");
+  
 
   //Verify!
   if (rank == 0) {
     CALI_MARK_BEGIN("correctness_check");
-    bool correct = isSorted(allNumbers, howMany * numTasks)
+    int correct = isSorted(allNumbers, howMany * numTasks);
     // if (correct)
     //   printf("Successfully sorted!\n");
     // else
