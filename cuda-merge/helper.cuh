@@ -6,6 +6,7 @@
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 
+
 // TYPES
 typedef float seconds_t;
 typedef float milliseconds_t;

@@ -95,14 +95,16 @@ void bitonic_sort(float *values)
   //CALI START
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
-
+  CALI_MARK_BEGIN("cudaMemcpy");
   //MEM COPY FROM HOST TO DEVICE
   cudaMemcpy(dev_values, values, size, cudaMemcpyHostToDevice);
   //MEM COPY FROM HOST TO DEVICE
 
   //CALI END
-  CALI_MARK_END("comm");
+  CALI_MARK_END("cudaMemcpy");
   CALI_MARK_END("comm_large");
+  CALI_MARK_END("comm");
+  
 
   dim3 blocks(BLOCKS,1);    /* Number of blocks   */
   dim3 threads(THREADS,1);  /* Number of threads  */
@@ -117,26 +119,28 @@ void bitonic_sort(float *values)
     /* Minor step */
     for (j=k>>1; j>0; j=j>>1) {
       bitonic_sort_step<<<blocks, threads>>>(dev_values, j, k);
-      iterations++;
     }
   }
   cudaDeviceSynchronize();
 
   //CALI END
-  CALI_MARK_END("comp");
   CALI_MARK_END("comp_large");
+  CALI_MARK_END("comp");
+  
 
   //CALI START
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
-
+  CALI_MARK_BEGIN("cudaMemcpy");
   //MEM COPY FROM DEVICE TO HOST
   cudaMemcpy(values, dev_values, size, cudaMemcpyDeviceToHost);
   //MEM COPY FROM DEVICE TO HOST
 
   //CALI END
-  CALI_MARK_END("comm");
+  CALI_MARK_END("cudaMemcpy");
   CALI_MARK_END("comm_large");
+  CALI_MARK_END("comm");
+  
 
   //CUDA FREE
   cudaFree(dev_values);
@@ -155,6 +159,7 @@ int main(int argc, char *argv[])
 
   THREADS = atoi(argv[1]);
   NUM_VALS = atoi(argv[2]);
+  OPTION = atoi(argv[3]);
   BLOCKS = NUM_VALS / THREADS;
 
   // printf("Number of threads: %d\n", THREADS);
@@ -167,7 +172,7 @@ int main(int argc, char *argv[])
 
   float *values = (float*) malloc( NUM_VALS * sizeof(float));
   CALI_MARK_BEGIN("data_init");
-  array_fill(values, NUM_VALS);
+  array_fill(values, NUM_VALS, OPTION);
   CALI_MARK_END("data_init");
 
   CALI_MARK_BEGIN("comp");
@@ -175,8 +180,8 @@ int main(int argc, char *argv[])
 
   bitonic_sort(values); /* Inplace */
 
-  CALI_MARK_END("comp");
   CALI_MARK_END("comp_large");
+  CALI_MARK_END("comp");
 
   CALI_MARK_BEGIN("correctness_check");
   int correctness = isSorted(values, NUM_VALS);
