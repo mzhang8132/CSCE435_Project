@@ -95,12 +95,13 @@ void bitonic_sort(float *values)
   //CALI START
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
-
+  CALI_MARK_BEGIN("cudaMemcpy");
   //MEM COPY FROM HOST TO DEVICE
   cudaMemcpy(dev_values, values, size, cudaMemcpyHostToDevice);
   //MEM COPY FROM HOST TO DEVICE
 
   //CALI END
+  CALI_MARK_END("cudaMemcpy");
   CALI_MARK_END("comm_large");
   CALI_MARK_END("comm");
   
@@ -130,12 +131,13 @@ void bitonic_sort(float *values)
   //CALI START
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
-
+  CALI_MARK_BEGIN("cudaMemcpy");
   //MEM COPY FROM DEVICE TO HOST
   cudaMemcpy(values, dev_values, size, cudaMemcpyDeviceToHost);
   //MEM COPY FROM DEVICE TO HOST
 
   //CALI END
+  CALI_MARK_END("cudaMemcpy");
   CALI_MARK_END("comm_large");
   CALI_MARK_END("comm");
   
