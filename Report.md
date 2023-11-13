@@ -377,9 +377,9 @@ num_procs, num_threads:
 - MPI: num_procs:
     - 2, 64, 128, 256, 512, 1024
 - CUDA: num_threads:
-    - 64, 128, 256, 512, 1024, 2048, 4096
+    - 64, 128, 256, 512, 1024
 
-This should result in 4x7x10=280 Caliper files for your MPI experiments.
+This should result in 7x4x6=168 Caliper files for your MPI experiments.
 
 ### 4b. Hints for performance analysis
 
