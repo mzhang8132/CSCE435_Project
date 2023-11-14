@@ -14,7 +14,7 @@ int BLOCKS;
 int NUM_VALS;
 int OPTION;
 
-const char* options[3] = {"random", "sorted", "reverse_sorted"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
@@ -34,6 +34,17 @@ void array_fill(float *arr, int length, int option) {
         for (int i = 0; i < length; ++i) {
             arr[i] = (float)length-1-i;
         }
+    } else if (option == 4) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)i;
+        }
+
+        int perturb_count = length / 100;
+        srand(0);
+        for (int i = 0; i < perturb_count; ++i) {
+            int index = rand() % length;
+            arr[index] = random_float();
+        }
     }
 }
 
@@ -46,23 +57,30 @@ int check(float* values, int length) {
     return 1;
 }
 
-__global__ void odd_even_sort(float *values, int j, int num_vals) {
-    int i = blockIdx.x;
+__global__ void even_sort(float *values, int num_vals) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if (j % 2 == 0 && ((i*2+1) < num_vals)) {
-		if (values[i*2] > values[i*2+1]) {
-			float temp = values[i*2];
-			values[i*2] = values[i*2+1];
-			values[i*2+1] = temp;
-		}
-	}
-	if (j % 2 == 1 && ((i*2+2) < num_vals)) {
-		if (values[i*2+1] > values[i*2+2]) {
-			float temp = values[i*2+1];
-			values[i*2+1] = values[i*2+2];
-			values[i*2+2] = temp;
-		}
-	}
+    if (i%2 == 0 && i < num_vals-1 ) {
+        if (values[i] > values[i+1]) {
+                float temp = values[i];
+                values[i] = values[i + 1];
+                values[i + 1] = temp;
+        }                   
+    }
+    __syncthreads();
+}
+
+__global__ void odd_sort(float *values, int num_vals) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i%2 == 1 && i < num_vals-1 ) {
+        if (values[i] > values[i+1]) {
+                float temp = values[i];
+                values[i] = values[i + 1];
+                values[i + 1] = temp;
+        }                   
+    }
+    __syncthreads();
 }
 
 int main(int argc, char *argv[]) {
@@ -90,14 +108,20 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(dev_values, values, size, cudaMemcpyHostToDevice);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
+    dim3 threadsPerBlock(THREADS);
+    dim3 numBlocks(BLOCKS);
+
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    for (int i = 0; i < NUM_VALS; i++) {
-        odd_even_sort<<<BLOCKS, THREADS>>>(dev_values, i, NUM_VALS);
+    for (int i = 0; i < NUM_VALS/2; ++i) {
+        even_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+        odd_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
     }
     cudaDeviceSynchronize();
     CALI_MARK_END("comp_large");
@@ -105,10 +129,12 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(values, dev_values, size, cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
-
+    
     CALI_MARK_BEGIN("correctness_check");
     int correctness = check(values, NUM_VALS);
     CALI_MARK_END("correctness_check");

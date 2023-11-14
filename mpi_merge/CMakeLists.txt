@@ -4,7 +4,7 @@ find_package(MPI REQUIRED)
 find_package(caliper REQUIRED)
 find_package(adiak REQUIRED)
 
-add_executable(odd_even odd_even.cpp)
+add_executable(merge.out merge.cpp)
 
 message(STATUS "MPI includes : ${MPI_INCLUDE_PATH}")
 message(STATUS "Caliper includes : ${caliper_INCLUDE_DIR}")
@@ -13,5 +13,5 @@ include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 include_directories(${caliper_INCLUDE_DIR})
 include_directories(${adiak_INCLUDE_DIRS})
 
-target_link_libraries(odd_even PRIVATE MPI::MPI_CXX)
-target_link_libraries(odd_even PRIVATE caliper)
+target_link_libraries(merge.out PRIVATE MPI::MPI_CXX)
+target_link_libraries(merge.out PRIVATE caliper)
