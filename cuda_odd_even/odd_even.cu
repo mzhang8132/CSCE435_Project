@@ -57,22 +57,30 @@ int check(float* values, int length) {
     return 1;
 }
 
-__global__ void odd_even_sort(float *values, int num_vals) {
-    int i = threadIdx.x + blockDim.x * blockIdx.x;
-    int stride = blockDim.x * gridDim.x;
+__global__ void even_sort(float *values, int num_vals) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
 
-    for (int j = 0; j < num_vals; ++j) {
-        int index = j % 2;
-
-        for (int k = i + index; k < num_vals - 1; k += stride * 2) {
-            if ((k % 2 == 0 && values[k] > values[k + 1]) || (k % 2 == 1 && k + 1 < num_vals && values[k] > values[k + 1])) {
-                float temp = values[k];
-                values[k] = values[k + 1];
-                values[k + 1] = temp;
-            }
-        }
-        __syncthreads();
+    if (i%2 == 0 && i < num_vals-1 ) {
+        if (values[i] > values[i+1]) {
+                float temp = values[i];
+                values[i] = values[i + 1];
+                values[i + 1] = temp;
+        }                   
     }
+    __syncthreads();
+}
+
+__global__ void odd_sort(float *values, int num_vals) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i%2 == 1 && i < num_vals-1 ) {
+        if (values[i] > values[i+1]) {
+                float temp = values[i];
+                values[i] = values[i + 1];
+                values[i + 1] = temp;
+        }                   
+    }
+    __syncthreads();
 }
 
 int main(int argc, char *argv[]) {
@@ -106,10 +114,14 @@ int main(int argc, char *argv[]) {
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
+    dim3 threadsPerBlock(THREADS);
+    dim3 numBlocks(BLOCKS);
+
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    for (int i = 0; i < NUM_VALS/2; i++) {
-        odd_even_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+    for (int i = 0; i < NUM_VALS/2; ++i) {
+        even_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
+        odd_sort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
     }
     cudaDeviceSynchronize();
     CALI_MARK_END("comp_large");
@@ -122,7 +134,7 @@ int main(int argc, char *argv[]) {
     CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
-
+    
     CALI_MARK_BEGIN("correctness_check");
     int correctness = check(values, NUM_VALS);
     CALI_MARK_END("correctness_check");
