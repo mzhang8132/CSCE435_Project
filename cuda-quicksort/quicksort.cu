@@ -24,7 +24,7 @@ int BLOCKS;
 int NUM_VALS;
 int OPTION;
 
-const char* options[3] = {"random", "sorted", "reverse_sorted"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
@@ -43,6 +43,17 @@ void array_fill(float *arr, int length, int option) {
     } else if (option == 3) {
         for (int i = 0; i < length; ++i) {
             arr[i] = (float)length-1-i;
+        }
+    } else if (option == 4){
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)i;
+        }
+        
+        int perturb_count = length / 100;
+        srand(0);
+        for (int i = 0; i < perturb_count; i++){
+            int index = rand() % length;
+            arr[index] = random_float();
         }
     }
 }
@@ -83,33 +94,30 @@ __global__ void quicksort(float *values, int length) {
     #define MAX_LEVELS 300
 
     int index = threadIdx.x + blockIdx.x * blockDim.x;
-
     if (index >= length) return;
 
-    int pivotIndex, L, R;
-    int leftStack[MAX_LEVELS];
-    int rightStack[MAX_LEVELS];
+    int L, R;
+    float leftStack[MAX_LEVELS];
+    float rightStack[MAX_LEVELS];
 
     int stackP = 0;
     leftStack[stackP] = 0;
     rightStack[stackP] = length - 1;
 
     while (stackP >= 0) {
-        L = leftStack[stackP];
         R = rightStack[stackP];
+        L = leftStack[stackP];
         stackP--;
 
         if (L < R) {
-            pivotIndex = partition(values, L, R);
+            int pivotIndex = partition(values, L, R);
 
-            // Pushing right side to stack
             if (pivotIndex < R) {
                 stackP++;
                 leftStack[stackP] = pivotIndex;
                 rightStack[stackP] = R;
             }
 
-            // Pushing left side to stack
             if (L < pivotIndex - 1) {
                 stackP++;
                 leftStack[stackP] = L;
@@ -118,6 +126,32 @@ __global__ void quicksort(float *values, int length) {
         }
     }
 }
+
+void sortArray(float* nums) {
+    float *dev_nums;
+    size_t size = NUM_VALS * sizeof(float);
+    
+    cudaMalloc((void**) &dev_nums, size);
+    cudaMemcpy(dev_nums, nums, size, cudaMemcpyHostToDevice);
+
+    dim3 blocks(BLOCKS, 1);
+    dim3 threads(THREADS, 1);
+
+    quicksort<<<blocks, threads>>>(dev_nums, NUM_VALS);
+
+    cudaMemcpy(nums, dev_nums, size, cudaMemcpyDeviceToHost);
+    cudaFree(dev_nums);
+}
+
+bool isSorted(float* nums) {
+    for (int i = 0; i < NUM_VALS - 1; ++i) {
+        if (nums[i] > nums[i + 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 int main(int argc, char *argv[]) {
     CALI_CXX_MARK_FUNCTION;
@@ -144,27 +178,42 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(dev_values, values, size, cudaMemcpyHostToDevice);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
+    /*
     for (int i = 0; i < NUM_VALS; i++) {
         quicksort<<<BLOCKS, THREADS>>>(dev_values, NUM_VALS);
     }
+    */
+    sortArray(values);
     cudaDeviceSynchronize();
     CALI_MARK_END("comp_large");
     CALI_MARK_END("comp");
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(values, dev_values, size, cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
+    
+    /*
+    for (int i = 0; i < NUM_VALS; i++){
+        printf("%f ", values[i]);
+    }
+    printf("\n");
+    */
 
     CALI_MARK_BEGIN("correctness_check");
-    int correctness = check(values, NUM_VALS);
+    int correctness = isSorted(values) ? 1 : 0;
+    //int correctness = check(values, NUM_VALS);
     CALI_MARK_END("correctness_check");
 
     cudaFree(dev_values);
@@ -174,7 +223,7 @@ int main(int argc, char *argv[]) {
     adiak::libraries();     // Libraries used
     adiak::cmdline();       // Command line used to launch the job
     adiak::clustername();   // Name of the cluster
-    adiak::value("Algorithm", "quicksort"); // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
+    adiak::value("Algorithm", "Quicksort"); // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
     adiak::value("ProgrammingModel", "CUDA"); // e.g., "MPI", "CUDA", "MPIwithCUDA"
     adiak::value("Datatype", "float"); // The datatype of input elements (e.g., double, int, float)
     adiak::value("SizeOfDatatype", sizeof(float)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)

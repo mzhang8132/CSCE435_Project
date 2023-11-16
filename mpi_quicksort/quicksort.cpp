@@ -18,7 +18,7 @@ https://www.geeksforgeeks.org/implementation-of-quick-sort-using-mpi-omp-and-pos
 int NUM_VALS;
 int OPTION;
 
-const char* options[3] = {"random", "sorted", "reverse_sorted"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
@@ -37,6 +37,17 @@ void array_fill(float *arr, int length, int offset, int option) {
     } else if (option == 3) {
         for (int i = 0; i < length; ++i) {
             arr[i] = (float)offset+length-1-i;
+        }
+    } else if (option == 4) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)offset+i;
+        }
+        
+        int perturb_count = length / 100;
+        srand(0);
+        for (int i = 0; i < perturb_count; i++){
+            int index = rand() % length;
+            arr[index] = random_float();
         }
     }
 }
@@ -74,36 +85,16 @@ void quicksort(float *values, int left, int right) {
     }
 }
 
-void quicksort_recursive(float *arr, int left, int right, int currProcRank, int maxRank, int rankIndex) {
-    int numElems = right - left + 1;
-    MPI_Status status;
-
-    if (numElems < 1000 || currProcRank >= maxRank) {
-        quicksort(arr, left, right);
-        return;
-    }
-
-    int pivotIndex = partition(arr, left, right);
-    int shareProc = currProcRank + (1 << rankIndex);
-    rankIndex++;
-
-    if (shareProc > maxRank) {
-        quicksort(arr, left, right);
-        return;
-    }
-
-    int lowerCount = pivotIndex - left + 1;
-    int upperCount = right - pivotIndex;
-
-    if (lowerCount < upperCount) {
-        MPI_Send(&arr[left], lowerCount, MPI_FLOAT, shareProc, 0, MPI_COMM_WORLD);
-        quicksort_recursive(arr, pivotIndex + 1, right, currProcRank, maxRank, rankIndex);
-        MPI_Recv(&arr[left], lowerCount, MPI_FLOAT, shareProc, 0, MPI_COMM_WORLD, &status);
-    } else {
-        MPI_Send(&arr[pivotIndex + 1], upperCount, MPI_FLOAT, shareProc, 0, MPI_COMM_WORLD);
-        quicksort_recursive(arr, left, pivotIndex, currProcRank, maxRank, rankIndex);
-        MPI_Recv(&arr[pivotIndex + 1], upperCount, MPI_FLOAT, shareProc, 0, MPI_COMM_WORLD, &status);
-    }
+float* merge(float* arr1, int n1, float* arr2, int n2) {
+    float* result = (float*)malloc((n1 + n2) * sizeof(float));
+    int i = 0, j = 0, k = 0;
+    while (i < n1 && j < n2)
+        result[k++] = arr1[i] < arr2[j] ? arr1[i++] : arr2[j++];
+    while (i < n1)
+        result[k++] = arr1[i++];
+    while (j < n2)
+        result[k++] = arr2[j++];
+    return result;
 }
 
 void assign(float* values, float* arr, int offset, int rank) {
@@ -148,16 +139,43 @@ int main(int argc, char *argv[]) {
     array_fill(values, offset, offset * taskid, OPTION); 
     CALI_MARK_END("data_init");
 
-    int rankPower = 0;
-    while ((1 << rankPower) <= taskid) rankPower++;
 
     MPI_Barrier(MPI_COMM_WORLD);
     double start_timer = MPI_Wtime();
 
     CALI_MARK_BEGIN("comp");
-    quicksort_recursive(values, 0, offset - 1, taskid, numtasks - 1, rankPower);
+    quicksort(values, 0, offset - 1);
     CALI_MARK_END("comp");
-
+    
+    for (int step = 1; step < numtasks; step = 2 * step) {
+        int partner = taskid ^ step;
+    
+        if (partner < numtasks) {
+            MPI_Status status;
+            int partner_chunk_size;
+    
+            CALI_MARK_BEGIN("comm");
+            MPI_Sendrecv(&offset, 1, MPI_INT, partner, 1,
+                         &partner_chunk_size, 1, MPI_INT, partner, 1,
+                         MPI_COMM_WORLD, &status);
+            
+            float* partner_chunk = (float*)malloc(partner_chunk_size * sizeof(float));
+            MPI_Sendrecv(values, offset, MPI_FLOAT, partner, 2,
+                         partner_chunk, partner_chunk_size, MPI_FLOAT, partner, 2,
+                         MPI_COMM_WORLD, &status);
+            CALI_MARK_END("comm");
+            
+            CALI_MARK_BEGIN("merge");
+            float* merged = merge(values, offset, partner_chunk, partner_chunk_size);
+            CALI_MARK_END("merge");
+    
+            free(values);
+            free(partner_chunk);
+            values = merged;
+            offset += partner_chunk_size;
+        }
+    }
+    
     float *global_list;
 
     CALI_MARK_BEGIN("comm");
@@ -171,7 +189,9 @@ int main(int argc, char *argv[]) {
         }
         free(temp);
     } else {
+        CALI_MARK_BEGIN("MPI_Send");
         MPI_Send(values, offset, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
+        CALI_MARK_END("MPI_Send");
     }
     CALI_MARK_END("comm");
 
@@ -179,7 +199,14 @@ int main(int argc, char *argv[]) {
         CALI_MARK_BEGIN("correctness_check");
         int correctness = check(global_list, NUM_VALS);
         CALI_MARK_END("correctness_check");
-
+        
+        /*
+        for (int i = 0; i < NUM_VALS; i++){
+        printf("%f ", global_list[i]);
+        }
+        printf("\n");
+        */
+        
         double finish_timer = MPI_Wtime();
         printf("Total time: %2.0f seconds\n", finish_timer - start_timer);
 
