@@ -410,6 +410,51 @@ perform runs that invoke algorithm2 for Sorted, ReverseSorted, and Random data).
 `Intel top-down`: For your CPU-only experiments on the scale of a single node, you should
 generate additional performance data, measuring the hardware counters on the CPU. This can be done by adding `topdown.all` to the `spot()` options in the `CALI_CONFIG` in your jobfile.
 
+**MPI Merge Sort**
+
+
+
+**CUDA Merge Sort**
+
+
+
+**MPI Quick Sort**
+
+
+
+**CUDA Quick Sort**
+
+
+
+**MPI Bitonic Sort**
+
+
+
+**CUDA Bitonic Sort**
+
+
+
+**MPI Odd Even Sort**
+
+!["65536 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/65536_main.png)
+!["262144 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/262144_main.png)
+!["1048576 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/1048576_main.png)
+!["4194304 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/4194304_main.png)
+!["16777216 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/16777216_main.png)
+!["67108864 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/67108864_main.png)
+!["268435456 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/268435456_main.png)
+
+In terms of the problem size being fixed, we can see that with more threads the run time increases in a linear fashion. This suggests that the MPI implementation of odd even does not scale well in terms of strong scaling.
+
+**CUDA Odd Even Sort**
+
+!["65536 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/65536_main.png)
+!["262144 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/262144_main.png)
+!["1048576 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/1048576_main.png)
+!["4194304 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/4194304_main.png)
+
+In terms of the problem size being fixed, we can see that with more threads the run time decreases exponentially down to a limit. This suggests that the CUDA implementation of odd even scales well in terms of strong scaling. The only instance that this does not occur is for an input size of 65536. This is because the input size was not big enough to saturate the GPU in order for the performance gain of the GPU to offset the overhead of parralizing the program on the GPU (communication to and from the GPU).
+
 ## 5. Presentation
 
 ## 6. Final Report
