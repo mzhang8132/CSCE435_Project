@@ -419,12 +419,20 @@ generate additional performance data, measuring the hardware counters on the CPU
 
 
 **MPI Quick Sort**
+!["65536 main mpi quicksort](./mpi_quicksort/mpi_quicksort_graphs/65536_main.png)
+!["262144 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/262144_main.png)
+!["1048576 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/1048576_main.png)
+!["4194304 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/4194304_main.png)
 
-
+By the time I was able to get my MPI to stop hanging and generate the cali files, I got a few out-of-memory errors. I dropped the nodes, the core nodes, and lowered the memory, and was able to generate a few cali files However, after some time, I only got errors that indicated some of the nodes were killed off so I went with what I had. Based on the graph, it is hard to say what is happening in terms of performance. In graph 4194304, we can see that as the number of threads increases, the time increases as well, which means the parallelism is not constructed quite correctly and needs further work.
 
 **CUDA Quick Sort**
+!["65536 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/65536_main.png)
+!["262144 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/262144_main.png)
+!["1048576 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/1048576_main.png)
+!["4194304 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/4194304_main.png)
 
-
+Based on the graphs, we can observe that GPU is finishing faster compared to the CPU. Thus meaning that data initialization correctness check and some of the communications are bottlenecks. When it comes to a larger dataset num_val of 2^20, the gap in performance is narrower. This means that GPU's parallelism is being offset by the increased cost of operations, especially given that it was timed out after 2^20 num_vals. We can also see the irregularities in performance across different types of input data.
 
 **MPI Bitonic Sort**
 
