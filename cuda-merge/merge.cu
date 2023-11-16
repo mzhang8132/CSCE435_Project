@@ -6,9 +6,9 @@
 
 #include "helper.cuh"
 
-void recordAdiak(const char* dt, int dt_size, int len, int op, int threads, int blocks, bool sorted)
+void recordAdiak(const char* dt, int dt_size, size_t len, int op, int threads, int blocks, bool sorted)
 {
-  const char* options[3] = {"random", "sorted", "reverse_sorted"};
+  const char* options[] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
   adiak::init(NULL);
   adiak::launchdate();    // launch date of the job
   adiak::libraries();     // Libraries used
@@ -32,21 +32,21 @@ void recordAdiak(const char* dt, int dt_size, int len, int op, int threads, int 
 
 template<typename T>
 __device__ inline
-void Merge(T* values, T* result, int left, int right, int u)
+void Merge(T* values, T* result, int left, int middle, int right)
 {
   int i,j,k;
-  i=left; j=right; k=left;
-  while (i<right && j<u) { 
+  i=left; j=middle; k=left;
+  while (i<middle && j<right) { 
     if (values[i]<=values[j]) {result[k]=values[i]; i++;} 
     else {result[k]=values[j]; j++;}
     k++;
   }
   
 
-  while (i<right) result[k++]=values[i++]; // i++; k++;
-  while (j<u) result[k++]=values[j++]; // j++; k++;
+  while (i<middle) result[k++]=values[i++]; // i++; k++;
+  while (j<right) result[k++]=values[j++]; // j++; k++;
 
-  for (k=left; k<u; k++) values[k]=result[k];
+  for (k=left; k<right; k++) values[k]=result[k];
 }
 
 template<typename T>
@@ -80,7 +80,7 @@ void MergeSort(T* values, T* result, size_t len)
 
 // Sorting Algorithm: Parallel Merge Sort
 template<typename T>
-milliseconds_t sort(T* values, T* result, int* kcalls, int len, int threads, int blocks)
+milliseconds_t sort(T* values, T* result, size_t bytes, size_t len, int threads, int blocks)
 {
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
@@ -91,7 +91,7 @@ milliseconds_t sort(T* values, T* result, int* kcalls, int len, int threads, int
   
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_large");
-  MergeSort<<<blocks, threads, sizeof(int) * len*2>>>(values, result, len);
+  MergeSort<<<blocks, threads, bytes*2>>>(values, result, len);
   cudaDeviceSynchronize();
   CALI_MARK_END("comp_large");
   CALI_MARK_END("comp");
@@ -100,14 +100,13 @@ milliseconds_t sort(T* values, T* result, int* kcalls, int len, int threads, int
 
   cudaEventSynchronize(stop);
 
-  ++(*kcalls);
   milliseconds_t time = 0.0;
   cudaEventElapsedTime(&time, start, stop);
   return time;
 }
 
 template<typename T>
-int run(int threads, int len, int option)
+int run(size_t len, int threads, int option)
 {
   char const* datatype;
   int blocks  = len / threads;
@@ -119,46 +118,45 @@ int run(int threads, int len, int option)
   clock_t start, stop;
   Timers cu_time;
   size_t bytes = len * sizeof(T);
-  int kcalls = 0;
 
   // Create caliper ConfigManager object
-  cali::ConfigManager mgr;
-  mgr.start();
+  cali::ConfigManager mgr; mgr.start();
 
   // Main Functionality
   start = clock();
 
-  T* host_arr = alloc_host<T>(len, option);                                             // 1. Allocate host memory and initialized host data
+  T* host_arr = alloc_host<T>(len, option);                                     // 1. Allocate host memory and initialized host data
   T* D_values = alloc_device<T>(bytes);                                         // 2. Allocate device memory
   T* D_result = alloc_device<T>(bytes);
   cu_time.copyH2D = copy<T>(D_values, host_arr, bytes, cudaMemcpyHostToDevice); // 3. Transfer input data from host to device memory
-  cu_time.sort = sort<T>(D_values, D_result, &kcalls, len, threads, blocks);    // 4. Execute kernels
+  cu_time.sort = sort<T>(D_values, D_result, bytes, len, threads, blocks);      // 4. Execute kernels
   cu_time.copyD2H = copy<T>(host_arr, D_result, bytes, cudaMemcpyDeviceToHost); // 5. Transfer output from device memory to host
 
   stop = clock();
 
   // Data Calculation and Operations
-  cu_time.bandwidth = bandwidth(cu_time.sort / 1000, bytes, kcalls);
+  cu_time.bandwidth = bandwidth(cu_time.sort / 1000, bytes, 1);
 
   print_elapsed(start, stop);
   print_stats(&cu_time);
 
-  bool sorted = (check_dealloc<T>(host_arr, D_values, D_result, len)) ? 0 : -1;
+  bool sorted = check_dealloc<T>(host_arr, D_values, D_result, len);
 
   recordAdiak(datatype, sizeof(T), len, option, threads, blocks, sorted);
   
   // Flush Caliper output
-  mgr.stop();
-  mgr.flush();
+  mgr.stop(); mgr.flush();
 
-  return sorted;
+  return sorted - 1;    // <==> (sorted) ? 0 : -1
 }
 
 int main(int argc, char *argv[])
 {
+  // Parse Args
   int threads = atoi(argv[1]);
-  int length = atoi(argv[2]);
+  size_t length = atoi(argv[2]);
   int option = atoi(argv[3]);
 
-  return run<float>(threads, length, option);
+  // Run algorithm on given args
+  return run<float>(length, threads, option);
 }

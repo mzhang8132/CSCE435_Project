@@ -11,7 +11,7 @@
 typedef float seconds_t;
 typedef float milliseconds_t;
 typedef float GBperSecond_t;
-typedef struct ctime {
+typedef struct {
   GBperSecond_t bandwidth = 0.0;
   milliseconds_t sort = 0.0;
   milliseconds_t copyH2D = 0.0;
@@ -31,7 +31,8 @@ inline void print_elapsed(clock_t start, clock_t stop)
   printf("Elapsed time: %.3fs\n", elapsed);
 }
 
-inline void print_array(int *arr, int length, const char* title = "")
+template<typename T>
+inline void print_array(T* arr, size_t length, const char* title = "")
 {
   printf("%s \n{", title);
   for (int i = 0; i < length; ++i) printf(" %d,", arr[i]);
@@ -53,40 +54,41 @@ inline GBperSecond_t bandwidth(seconds_t time, size_t bytes, int num_calls)
 }
 
 template<typename T>
-inline void fill_array(T* arr, int length, int option)
+inline void fill_array(T* arr, size_t len, int option)
 { 
   CALI_MARK_BEGIN("data_init");
+  srand(0);
   switch (option)
   {
-  case 1:
-    srand(time(NULL));
-    for (int i = 0; i < length; ++i) arr[i] = random(T{});
-    break;
-  case 2:
-    for (int i = 0; i < length; ++i) arr[i] = (T)i;
-    break;
-  case 3:
-    for (int i = 0; i < length; ++i) arr[i] = (T)length-1-i;
-    break;
-  default:
-    break;
+    case 1: // Random
+      for (int i = 0; i < len; ++i) arr[i] = random(T());    break;
+    case 2: // Sorted
+      for (int i = 0; i < len; ++i) arr[i] = T(i);           break;
+    case 3: // Reverse Sorted
+      for (int i = 0; i < len; ++i) arr[i] = T(len-1-i);  break;
+    case 4: // 1% Perturbed
+      for (int i = 0; i < len; ++i) arr[i] = T(i);
+      for (int i = 0; i < len / 100; ++i) arr[rand() % len] = random(T());
+      break;
+    default: break;
   }
   CALI_MARK_END("data_init");
 }
 
 template<typename T>
-inline bool check_dealloc(T* __host, T* __dev1, T* __dev2, int len)
+inline bool check_dealloc(T* __host, T* __dev1, T* __dev2, size_t len)
 {
-  cudaFree(__dev1);
-  cudaFree(__dev2);
   // print_array(__host, len, "\nAfter Sort:");
   CALI_MARK_BEGIN("correctness_check");
   bool pass = std::is_sorted(&__host[0], &__host[len - 1]);
   CALI_MARK_END("correctness_check");
 
+  cudaFree(__dev1);
+  cudaFree(__dev2);
+  delete[] __host;
+
   if (pass) printf("\t\033[1m\033[92mSORTED\033[0m\n");
   else printf("\t\033[1m\033[31mNOT SORTED\033[0m\n");
-  delete[] __host;
   return pass;
 }
 
@@ -121,7 +123,9 @@ milliseconds_t copy(T* dst, T* src, size_t bytes, cudaMemcpyKind direction)
   cudaEventRecord(start);
   CALI_MARK_BEGIN("comm");
   CALI_MARK_BEGIN("comm_large");
+  CALI_MARK_BEGIN("cudaMemcpy");
   cudaError_t err = cudaMemcpy(dst, src, bytes, direction);
+  CALI_MARK_END("cudaMemcpy");
   CALI_MARK_END("comm_large");
   CALI_MARK_END("comm");
   cudaEventRecord(stop);
