@@ -436,6 +436,8 @@ generate additional performance data, measuring the hardware counters on the CPU
 !["67108864 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/67108864_main.png)
 !["268435456 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/268435456_main.png)
 
+When the problem size is fixed, we can see that with more threads the run time increases in a linear fashion. The only consistent exception is for the 256 thread count, which improves performance slightly. This suggests that the optimal thread scaling for this implementation exists somewhere close to the 256 thread count.
+
 **CUDA Bitonic Sort**
 
 !["65536 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/65536_main.png)
@@ -445,6 +447,8 @@ generate additional performance data, measuring the hardware counters on the CPU
 !["16777216 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/16777216_main.png)
 !["67108864 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/67108864_main.png)
 !["268435456 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/268435456_main.png)
+
+With a fixed problem size, we can observe an increase in peformance as we increase the thread count. The optimal thread count seems to be close to the 512 thread count. It seems that this is the value that best saturates the GPU, overshadowing the overhead required to execute it. This behavior would suggest good strong scaling.
 
 **MPI Odd Even Sort**
 
