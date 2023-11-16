@@ -148,7 +148,9 @@ int main(int argc, char *argv[]) {
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("MPI_Scatter");
     MPI_Scatter(data, chunk_size, MPI_FLOAT, chunk, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END("MPI_Scatter");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
@@ -170,7 +172,9 @@ int main(int argc, char *argv[]) {
     }
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("MPI_Gather");
     MPI_Gather(chunk, local_chunk_size, MPI_FLOAT, sorted, local_chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END("MPI_Gather");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
     free(chunk);
