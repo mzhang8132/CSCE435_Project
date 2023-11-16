@@ -24,28 +24,30 @@ float random_float() {
   return (float)rand()/(float)RAND_MAX;
 }
 
-void array_fill(float *arr, int length, int offset, int option) {
-    if (option == 1) {
-        srand(offset);
+void array_fill(float *arr, int length, int option, int rank, int numtasks) {
+    if (option == 1) { 
+        int start = length * rank;
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)(start + i);
+        }
+    } else if (option == 2) {
+        int start = length * (numtasks - rank - 1);
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)(start - i);
+        }
+    } else if (option == 3) {
+        srand(MPI_Wtime() * 1000 + rank);
         for (int i = 0; i < length; ++i) {
             arr[i] = random_float();
         }
-    } else if (option == 2) {
-        for (int i = 0; i < length; ++i) {
-            arr[i] = (float)offset+i;
-        }
-    } else if (option == 3) {
-        for (int i = 0; i < length; ++i) {
-            arr[i] = (float)offset+length-1-i;
-        }
     } else if (option == 4) {
+        int start = length * rank;
         for (int i = 0; i < length; ++i) {
-            arr[i] = (float)offset+i;
+            arr[i] = (float)(start + i);
         }
-        
+        srand(MPI_Wtime() * 1000 + rank);
         int perturb_count = length / 100;
-        srand(0);
-        for (int i = 0; i < perturb_count; i++){
+        for (int i = 0; i < perturb_count; ++i) {
             int index = rand() % length;
             arr[index] = random_float();
         }
@@ -116,7 +118,7 @@ int check(float* values, int length) {
 int main(int argc, char *argv[]) {
     CALI_CXX_MARK_FUNCTION;
 
-    int numtasks, taskid;
+    int numtasks, taskid, chunk_size, local_chunk_size;
 
     NUM_VALS = atoi(argv[1]);
     OPTION = atoi(argv[2]);
@@ -130,74 +132,52 @@ int main(int argc, char *argv[]) {
     cali::ConfigManager mgr;
     mgr.start();
 
-    int offset = NUM_VALS / numtasks;
+    chunk_size = (NUM_VALS % numtasks == 0) ? (NUM_VALS / numtasks) : (NUM_VALS / (numtasks - 1));
 
-    float *values = (float*)malloc(offset * sizeof(float));
+    float *chunk = (float*)malloc(chunk_size * sizeof(float));
 
-    // Generate values
-    CALI_MARK_BEGIN("data_init");
-    array_fill(values, offset, offset * taskid, OPTION); 
-    CALI_MARK_END("data_init");
-
-
-    MPI_Barrier(MPI_COMM_WORLD);
+    float *data = NULL;
+    if (taskid == 0) {
+        data = (float*)malloc(NUM_VALS * sizeof(float));
+        CALI_MARK_BEGIN("data_init");
+        array_fill(data, NUM_VALS, OPTION, taskid, numtasks);
+        CALI_MARK_END("data_init");
+    }
+    
     double start_timer = MPI_Wtime();
 
-    CALI_MARK_BEGIN("comp");
-    quicksort(values, 0, offset - 1);
-    CALI_MARK_END("comp");
-    
-    for (int step = 1; step < numtasks; step = 2 * step) {
-        int partner = taskid ^ step;
-    
-        if (partner < numtasks) {
-            MPI_Status status;
-            int partner_chunk_size;
-    
-            CALI_MARK_BEGIN("comm");
-            MPI_Sendrecv(&offset, 1, MPI_INT, partner, 1,
-                         &partner_chunk_size, 1, MPI_INT, partner, 1,
-                         MPI_COMM_WORLD, &status);
-            
-            float* partner_chunk = (float*)malloc(partner_chunk_size * sizeof(float));
-            MPI_Sendrecv(values, offset, MPI_FLOAT, partner, 2,
-                         partner_chunk, partner_chunk_size, MPI_FLOAT, partner, 2,
-                         MPI_COMM_WORLD, &status);
-            CALI_MARK_END("comm");
-            
-            CALI_MARK_BEGIN("merge");
-            float* merged = merge(values, offset, partner_chunk, partner_chunk_size);
-            CALI_MARK_END("merge");
-    
-            free(values);
-            free(partner_chunk);
-            values = merged;
-            offset += partner_chunk_size;
-        }
-    }
-    
-    float *global_list;
-
     CALI_MARK_BEGIN("comm");
-    if (taskid == 0) {
-        global_list = (float*)malloc(NUM_VALS * sizeof(float));
-        assign(global_list, values, offset, 0);
-        float *temp = (float*)malloc(offset * sizeof(float));
-        for (int rank = 1; rank < numtasks; rank++) {
-            MPI_Recv(temp, offset, MPI_FLOAT, rank, 0, MPI_COMM_WORLD, &status);
-            assign(global_list, temp, offset, rank);
-        }
-        free(temp);
-    } else {
-        CALI_MARK_BEGIN("MPI_Send");
-        MPI_Send(values, offset, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
-        CALI_MARK_END("MPI_Send");
-    }
+    CALI_MARK_BEGIN("comm_large");
+    MPI_Scatter(data, chunk_size, MPI_FLOAT, chunk, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
     if (taskid == 0) {
+        free(data);
+    }
+    
+    local_chunk_size = (NUM_VALS >= chunk_size * (taskid + 1)) ? chunk_size : (NUM_VALS - chunk_size * taskid);
+    
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_large");
+    quicksort(chunk, 0, local_chunk_size);
+    CALI_MARK_END("comp_large");
+    CALI_MARK_END("comp");
+    
+    float *sorted = NULL;
+    if (taskid == 0) {
+        sorted = (float*)malloc(NUM_VALS * sizeof(float));
+    }
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
+    MPI_Gather(chunk, local_chunk_size, MPI_FLOAT, sorted, local_chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
+    free(chunk);
+
+    if (taskid == 0) {
         CALI_MARK_BEGIN("correctness_check");
-        int correctness = check(global_list, NUM_VALS);
+        int correctness = check(sorted, NUM_VALS);
         CALI_MARK_END("correctness_check");
         
         /*
@@ -208,7 +188,7 @@ int main(int argc, char *argv[]) {
         */
         
         double finish_timer = MPI_Wtime();
-        printf("Total time: %2.0f seconds\n", finish_timer - start_timer);
+        // printf("Total time: %2.0f seconds\n", finish_timer - start_timer);
 
         adiak::init(NULL);
         adiak::launchdate();    // launch date of the job
@@ -226,11 +206,9 @@ int main(int argc, char *argv[]) {
         adiak::value("implementation_source", "Online, Handwritten, and AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
         adiak::value("correctness", correctness); // Whether the dataset has been sorted (0, 1)
 
-        free(global_list);
+        free(sorted);
     }
-
-    free(values);
-
+    
     mgr.stop();
     mgr.flush();
 
