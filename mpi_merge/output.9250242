@@ -1,0 +1,29 @@
+Filling array with option:1
+localArray after std::sort()localArray after std::sort()	ID:3
+{ 2, 6,}
+Process #3 of 4 on c587.cluster took 0.000401 seconds 
+Get local_time	PROC:3
+MPI_Reduce		PROC:3
+localArray after std::sort()	ID:2
+{ 3, 5,}
+Process #2 of 4 on c587.cluster took 0.003332 seconds 
+Get local_time	PROC:2
+MPI_Reduce		PROC:2
+localArray after std::sort()	ID:1
+{ 5, 7,}
+Process #1 of 4 on c587.cluster took 0.000384 seconds 
+Get local_time	PROC:1
+MPI_Reduce		PROC:1
+	ID:0
+{ 3, 6,}
+Process #0 of 4 on c587.cluster took 0.029534 seconds 
+Get local_time	PROC:0
+MPI_Reduce		PROC:0
+Sorting 8 integers took 0.029683 seconds 
+SORTED
+delete[] localArray	PROC:0
+delete[] localArray	PROC:2
+delete[] localArray	PROC:1
+delete[] localArray	PROC:3
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 9250242 ON c587 CANCELLED AT 2023-11-14T17:55:51 ***

@@ -1,0 +1,28 @@
+Filling array with option:1
+Process #0 of 4 on c249.cluster took 0.000000 seconds 
+Process #1 of 4 on c249.cluster took 0.000000 seconds 
+Process #3 of 4 on c249.cluster took 0.000000 seconds 
+Get local_time	PROC:Get local_time	PROC:13
+MPI_Reduce		PROC:
+1MPI_Reduce		PROC:
+3delete[] localArray	PROC:
+1delete[] localArray	PROC:
+3Finished run()	PROC:
+1Finished run()	PROC:
+3
+Process #2 of 4 on c249.cluster took 0.000000 seconds 
+Get local_time	PROC:2
+MPI_Reduce		PROC:2
+delete[] localArray	PROC:2
+Finished run()	PROC:2
+Get local_time	PROC:0
+MPI_Reduce		PROC:0
+Sorting 8 integers took 0.000000 seconds 
+NOT SORTED
+FAILED SORTED ARRAY
+{ 0, 0, 3, 6, 26333040, 0, 277116872, 10945,}
+delete[] localArray	PROC:0
+Finished run()	PROC:0
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 9300146.0 ON c249 CANCELLED AT 2023-11-15T15:09:16 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 9300146 ON c249 CANCELLED AT 2023-11-15T15:09:16 DUE TO TIME LIMIT ***

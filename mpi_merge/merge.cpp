@@ -16,8 +16,6 @@ a list of sources:
 - https://stackoverflow.com/questions/61910607/parallel-merge-sort-using-mpi
 */
 
-// CURRENT TEST CASE:   sbatch merge.grace_job $((1<<3)) 4 1
-
 /**
  * @brief Merge two sublists into one Result list
  * @param A     Sublist to merge
@@ -51,7 +49,6 @@ T* sort(int height, int id, T localArray[], size_t len, MPI_Comm comm, T globalA
 
   myHeight = 0;
   std::sort(&localArray[0], &localArray[len]); // sort small, local array using sequential means
-  print_array(localArray, len, "localArray after std::sort()", id);
   half1 = localArray;
 
   while (myHeight < height) {  
@@ -62,7 +59,7 @@ T* sort(int height, int id, T localArray[], size_t len, MPI_Comm comm, T globalA
 
 
       half2 = new T[len];
-      MPI_Recv(half2, len, MPI_INT, rightChild, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      // MPI_Recv(half2, len, MPI_INT, rightChild, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 
       mergeResult = new T[len*2];
@@ -79,7 +76,7 @@ T* sort(int height, int id, T localArray[], size_t len, MPI_Comm comm, T globalA
 
     } else {
         
-      MPI_Send(half1, len, MPI_INT, parent, 0, MPI_COMM_WORLD);
+      // MPI_Send(half1, len, MPI_INT, parent, 0, MPI_COMM_WORLD);
       if (myHeight != 0) delete[] half1;
       myHeight = height;
     }
@@ -95,9 +92,9 @@ int run(int procs, size_t len, int height, int option)
 {
 
   int id, local_len;
-  T *localArray, *globalArray;
-  double startTime, localTime, totalTime;
-  double zeroStartTime, zeroTotalTime, processStartTime, processTotalTime;
+  T* localArray;
+  T* globalArray;
+  double local_time, total_time, master_time, process_time;
   
   int length = -1;
   char myHostName[MPI_MAX_PROCESSOR_NAME];
@@ -116,24 +113,26 @@ int run(int procs, size_t len, int height, int option)
 
   // print_array(localArray, local_len, "localArray", id);
 
-  startTime = MPI_Wtime();
+  // local_time = MPI_Wtime();
   if (id == 0) {
-    zeroStartTime = MPI_Wtime();
+    // master_time = MPI_Wtime();
     globalArray = sort<T>(height, id, localArray, local_len, MPI_COMM_WORLD, globalArray);
-    zeroTotalTime = MPI_Wtime() - zeroStartTime;
-    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, zeroTotalTime);
+    // master_time = MPI_Wtime() - master_time;
+    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, master_time);
   } else {
-    processStartTime = MPI_Wtime();
+    // process_time = MPI_Wtime();
     sort<T>(height, id, localArray, local_len, MPI_COMM_WORLD, NULL);
-    processTotalTime = MPI_Wtime() - processStartTime;
-    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, processTotalTime);
+    // process_time = MPI_Wtime() - process_time;
+    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, process_time);
   }
-  localTime = MPI_Wtime() - startTime;
-  MPI_Reduce(&localTime, &totalTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+  std::cout << "Get local_time\tPROC:" << id << "\n";
+  // local_time = MPI_Wtime() - local_time;
+  std::cout << "MPI_Reduce\t\tPROC:" << id << "\n";
+  // MPI_Reduce(&local_time, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
   if (id == 0) {
     // print_array(globalArray, len, "FINAL SORTED ARRAY", id);
-    printf("Sorting %d integers took %f seconds \n", len, totalTime);
+    printf("Sorting %d integers took %f seconds \n", len, total_time);
     bool sorted = std::is_sorted(&globalArray[0], &globalArray[len]);
     if (sorted) std::cout << "SORTED\n";
     else {
@@ -144,16 +143,17 @@ int run(int procs, size_t len, int height, int option)
   }
 
   delete[] localArray;
-  return 0;
+  std::cout << "delete[] localArray\tPROC:" << id << "\n";
+  return id;
 }
 
 int main(int argc, char *argv[])
 {
+  MPI_Init(&argc, &argv);
+  
   // Parse Args
   size_t length = atoi(argv[1]);
   int procs, height, option = atoi(argv[2]);
-
-  MPI_Init(&argc, &argv);
 
   MPI_Comm_size(MPI_COMM_WORLD, &procs);     // Get Number of Processors
 
@@ -162,8 +162,12 @@ int main(int argc, char *argv[])
 
 
   // Run algorithm on given args
-  run<int>(procs, length, height, option);
-  MPI_Finalize();
+  int id = run<int>(procs, length, height, option);
+  std::cout << "Finished run()\tPROC:" << id << "\n";
 
+  // std::cout << "Howdy world" << std::endl;
+
+  // MPI_Waitall(); <-- MAYBE?
+  MPI_Finalize();
   return 0;
 }
