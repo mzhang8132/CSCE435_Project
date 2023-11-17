@@ -1,0 +1,10 @@
+Number of threads: 64
+Number of values: 1048576
+Number of blocks: 16384
+Array Type:	float
+Elapsed time: 0.290s
+Sorting Step Time:		 0.074144 ms
+cudaMemcpy Host2Dev Time:		 1.148480 ms
+cudaMemcpy Dev2Host Time:		 0.953184 ms
+Effective Bandwidth (GB/s):		 226.278809 GB/s
+	[1m[92mSORTED[0m

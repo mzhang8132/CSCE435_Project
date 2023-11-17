@@ -125,7 +125,7 @@ int run(size_t len, int threads, int option)
   // Main Functionality
   start = clock();
 
-  T* host_arr = alloc_host<T>(len, option);                                     // 1. Allocate host memory and initialized host data
+  T* host_arr = alloc_arr<T>(len, option);                                     // 1. Allocate host memory and initialized host data
   T* D_values = alloc_device<T>(bytes);                                         // 2. Allocate device memory
   T* D_result = alloc_device<T>(bytes);
   cu_time.copyH2D = copy<T>(D_values, host_arr, bytes, cudaMemcpyHostToDevice); // 3. Transfer input data from host to device memory
@@ -152,6 +152,8 @@ int run(size_t len, int threads, int option)
 
 int main(int argc, char *argv[])
 {
+  CALI_CXX_MARK_FUNCTION;
+  
   // Parse Args
   int threads = atoi(argv[1]);
   size_t length = atoi(argv[2]);

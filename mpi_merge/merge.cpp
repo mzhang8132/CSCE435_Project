@@ -1,10 +1,4 @@
 #include "mpi.h"
-#include <algorithm>
-
-
-#include <caliper/cali.h>
-#include <caliper/cali-manager.h>
-#include <adiak.hpp>
 
 #include "helper.h"
 
@@ -42,29 +36,48 @@ T* merge(T* A, T* B, T* res, size_t size)
 }
 
 template<typename T>
-T* sort(int height, int id, T localArray[], size_t len, MPI_Comm comm, T globalArray[])
+T* mergeSort(int height, int id, T localArray[], size_t len, T globalArray[])
 {
-  int parent, rightChild, myHeight;
-  T *half1, *half2, *mergeResult;
+  int parent, rightChild, myHeight = 0;
+  T* half1;
+  T* half2;
+  T* mergeResult;
 
-  myHeight = 0;
+
+  CALI_MARK_BEGIN("comp");
+  CALI_MARK_BEGIN("comp_large");
+  CALI_MARK_BEGIN("std::sort");
   std::sort(&localArray[0], &localArray[len]); // sort small, local array using sequential means
+  CALI_MARK_END("std::sort");
+  CALI_MARK_END("comp_large");
+  CALI_MARK_END("comp");
+
   half1 = localArray;
 
-  while (myHeight < height) {  
+  while (myHeight < height)
+  {  
     parent = (id & (~(1 << myHeight)));
-
     if (parent == id) {
       rightChild = (id | (1 << myHeight));
-
-
       half2 = new T[len];
-      // MPI_Recv(half2, len, MPI_INT, rightChild, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-
       mergeResult = new T[len*2];
 
+      CALI_MARK_BEGIN("comm");
+      CALI_MARK_BEGIN("comm_large");
+      CALI_MARK_BEGIN("MPI_Recv");
+      MPI_Recv(half2, len, MPI_INT, rightChild, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      CALI_MARK_END("MPI_Recv");
+      CALI_MARK_END("comm_large");
+      CALI_MARK_END("comm");
+
+
+      CALI_MARK_BEGIN("comp");
+      CALI_MARK_BEGIN("comp_large");
+      CALI_MARK_BEGIN("merge");
       mergeResult = merge<T>(half1, half2, mergeResult, len);
+      CALI_MARK_END("merge");
+      CALI_MARK_END("comp_large");
+      CALI_MARK_END("comp");
 
       half1 = mergeResult;
       len = len * 2;
@@ -75,99 +88,92 @@ T* sort(int height, int id, T localArray[], size_t len, MPI_Comm comm, T globalA
       myHeight++;
 
     } else {
-        
-      // MPI_Send(half1, len, MPI_INT, parent, 0, MPI_COMM_WORLD);
+      CALI_MARK_BEGIN("comm");
+      CALI_MARK_BEGIN("comm_large");
+      CALI_MARK_BEGIN("MPI_Send");
+      MPI_Send(half1, len, MPI_INT, parent, 0, MPI_COMM_WORLD);
+      CALI_MARK_END("MPI_Send");
+      CALI_MARK_END("comm_large");
+      CALI_MARK_END("comm");
       if (myHeight != 0) delete[] half1;
       myHeight = height;
     }
   }
-
+  printf("Process #%d Finished \n", id);
   if (id == 0) globalArray = half1;
   return globalArray;
 }
 
 
 template<typename T>
-int run(int procs, size_t len, int height, int option)
+T* sort(T* values, size_t len, int procs, int height, int id)
 {
+  int local_len = len / procs;
+  T* local_arr = new T[local_len];
 
-  int id, local_len;
-  T* localArray;
-  T* globalArray;
-  double local_time, total_time, master_time, process_time;
+  CALI_MARK_BEGIN("comm");
+  CALI_MARK_BEGIN("comm_large");
+  CALI_MARK_BEGIN("MPI_Scatter");
+  MPI_Scatter(values, local_len, MPI_INT, local_arr, local_len, MPI_INT, 0, MPI_COMM_WORLD);
+  CALI_MARK_END("MPI_Scatter");
+  CALI_MARK_END("comm_large");
+  CALI_MARK_END("comm");
+
+  values = mergeSort<T>(height, id, local_arr, local_len, (id == 0) ? values : NULL);
   
-  int length = -1;
-  char myHostName[MPI_MAX_PROCESSOR_NAME];
-  MPI_Comm_rank(MPI_COMM_WORLD, &id);           // Get the task ID
-  MPI_Get_processor_name(myHostName, &length);
+  delete[] local_arr;
+  return values;
+}
 
+template<typename T>
+int run(size_t len, int procs, int option)
+{
+  int id; MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+  char const* datatype;
+  int height = __builtin_ctz(procs);
   if (id == 0) {
-    globalArray = new T[len];
-    fill_array(globalArray, len, option);
-    // print_array(globalArray, len, "UNSORTED ARRAY", id);
+    printf("Number of processors: %d\n", procs);  // THREADS = 256; 
+    printf("Number of values: %d\n", len);  // NUM_VALS = 1024;
+    printf("Height of Tree: %d\n", height);
+    printf("Array Type:\t%s\n", (datatype = (typeid(T) == typeid(int)) ? "int" : (typeid(T) == typeid(float)) ? "float" : "unknown"));
   }
 
-  local_len = len / procs;
-  localArray = new T[local_len];
-  MPI_Scatter(globalArray, local_len, MPI_INT, localArray, local_len, MPI_INT, 0, MPI_COMM_WORLD);
+  // Create caliper ConfigManager object
+  cali::ConfigManager mgr; mgr.start();
 
-  // print_array(localArray, local_len, "localArray", id);
+  T* globl_arr;
+  bool sorted = false;
+  // MPI_Bcast(&length, 1, MPI_LONG, 0, MPI_COMM_WORLD); // Broadcast length to all procs
 
-  // local_time = MPI_Wtime();
+  if (id == 0) globl_arr = alloc_arr<T>(len, option);
+
+  globl_arr = sort<T>(globl_arr, len, procs, height, id);
+  
   if (id == 0) {
-    // master_time = MPI_Wtime();
-    globalArray = sort<T>(height, id, localArray, local_len, MPI_COMM_WORLD, globalArray);
-    // master_time = MPI_Wtime() - master_time;
-    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, master_time);
-  } else {
-    // process_time = MPI_Wtime();
-    sort<T>(height, id, localArray, local_len, MPI_COMM_WORLD, NULL);
-    // process_time = MPI_Wtime() - process_time;
-    printf("Process #%d of %d on %s took %f seconds \n", id, procs, myHostName, process_time);
-  }
-  std::cout << "Get local_time\tPROC:" << id << "\n";
-  // local_time = MPI_Wtime() - local_time;
-  std::cout << "MPI_Reduce\t\tPROC:" << id << "\n";
-  // MPI_Reduce(&local_time, &total_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-
-  if (id == 0) {
-    // print_array(globalArray, len, "FINAL SORTED ARRAY", id);
-    printf("Sorting %d integers took %f seconds \n", len, total_time);
-    bool sorted = std::is_sorted(&globalArray[0], &globalArray[len]);
-    if (sorted) std::cout << "SORTED\n";
-    else {
-      std::cout << "NOT SORTED\n";
-      print_array(globalArray, len, "FAILED SORTED ARRAY");
-    }
-    delete[] globalArray;
+    sorted = check_dealloc<T>(globl_arr, len);
+    recordAdiak(datatype, sizeof(T), len, option, procs, sorted);
   }
 
-  delete[] localArray;
-  std::cout << "delete[] localArray\tPROC:" << id << "\n";
-  return id;
+  // Flush Caliper output
+  mgr.stop(); mgr.flush();
+
+  return sorted - 1;
 }
 
 int main(int argc, char *argv[])
 {
+  CALI_CXX_MARK_FUNCTION;
   MPI_Init(&argc, &argv);
   
   // Parse Args
   size_t length = atoi(argv[1]);
-  int procs, height, option = atoi(argv[2]);
-
-  MPI_Comm_size(MPI_COMM_WORLD, &procs);     // Get Number of Processors
-
-  // calculate total height of tree
-  height = __builtin_ctz(procs);   // Equivalent to logBASE2
-
-
+  int option =    atoi(argv[2]);
+  int procs;      MPI_Comm_size(MPI_COMM_WORLD, &procs);
+  
   // Run algorithm on given args
-  int id = run<int>(procs, length, height, option);
-  std::cout << "Finished run()\tPROC:" << id << "\n";
+  int res = run<int>(length, procs, option);
 
-  // std::cout << "Howdy world" << std::endl;
-
-  // MPI_Waitall(); <-- MAYBE?
   MPI_Finalize();
-  return 0;
+  return res;
 }

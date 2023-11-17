@@ -80,7 +80,7 @@ inline bool check_dealloc(T* __host, T* __dev1, T* __dev2, size_t len)
 {
   // print_array(__host, len, "\nAfter Sort:");
   CALI_MARK_BEGIN("correctness_check");
-  bool pass = std::is_sorted(&__host[0], &__host[len - 1]);
+  bool pass = std::is_sorted(&__host[0], &__host[len]);
   CALI_MARK_END("correctness_check");
 
   cudaFree(__dev1);
@@ -96,7 +96,7 @@ inline bool check_dealloc(T* __host, T* __dev1, T* __dev2, size_t len)
 // MAJOR STEPS
 
 template<typename T>
-T* alloc_host(int len, int option)
+T* alloc_arr(int len, int option)
 {
   T* values = new T[len];
   fill_array<T>(values, len, option);
