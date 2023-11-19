@@ -412,11 +412,27 @@ generate additional performance data, measuring the hardware counters on the CPU
 
 **MPI Merge Sort**
 
+!["65536 main mpi merge"](./mpi_merge/Plots-MPI/65536_main.png)
+!["262144 main mpi merge"](./mpi_merge/Plots-MPI/262144_main.png)
+!["1048576 main mpi merge"](./mpi_merge/Plots-MPI/1048576_main.png)
+!["4194304 main mpi merge"](./mpi_merge/Plots-MPI/4194304_main.png)
+!["16777216 main mpi merge"](./mpi_merge/Plots-MPI/16777216_main.png)
+!["67108864 main mpi merge"](./mpi_merge/Plots-MPI/67108864_main.png)
+!["268435456 main mpi merge"](./mpi_merge/Plots-MPI/268435456_main.png)
 
+We can observe that with a fixed problems size, and increasing number of threads, the runtime also lineraly increases, suggesting that our MPI implementation of merge sort does not scale well in terms of strong scaling.
 
 **CUDA Merge Sort**
 
+!["65536 main CUDA merge"](./cuda-merge/Plots-CUDA/65536_main.png)
+!["262144 main CUDA merge"](./cuda-merge/Plots-CUDA/262144_main.png)
+!["1048576 main CUDA merge"](./cuda-merge/Plots-CUDA/1048576_main.png)
+!["4194304 main CUDA merge"](./cuda-merge/Plots-CUDA/4194304_main.png)
+!["16777216 main CUDA merge"](./cuda-merge/Plots-CUDA/16777216_main.png)
+!["67108864 main CUDA merge"](./cuda-merge/Plots-CUDA/67108864_main.png)
+!["268435456 main CUDA merge"](./cuda-merge/Plots-CUDA/268435456_main.png)
 
+This data appears to be missing the GPU data collection, which likely means that we will need to look into re-collecting the data and plotting that data to make correct inferences about the merge sort CUDA implementation
 
 **MPI Quick Sort**
 !["65536 main mpi quicksort](./mpi_quicksort/mpi_quicksort_graphs/65536_main.png)

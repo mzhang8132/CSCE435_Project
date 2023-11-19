@@ -46,9 +46,7 @@ T* mergeSort(int height, int id, T localArray[], size_t len, T globalArray[])
 
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_large");
-  CALI_MARK_BEGIN("std::sort");
   std::sort(&localArray[0], &localArray[len]); // sort small, local array using sequential means
-  CALI_MARK_END("std::sort");
   CALI_MARK_END("comp_large");
   CALI_MARK_END("comp");
 
@@ -73,9 +71,7 @@ T* mergeSort(int height, int id, T localArray[], size_t len, T globalArray[])
 
       CALI_MARK_BEGIN("comp");
       CALI_MARK_BEGIN("comp_large");
-      CALI_MARK_BEGIN("merge");
       mergeResult = merge<T>(half1, half2, mergeResult, len);
-      CALI_MARK_END("merge");
       CALI_MARK_END("comp_large");
       CALI_MARK_END("comp");
 
@@ -99,7 +95,7 @@ T* mergeSort(int height, int id, T localArray[], size_t len, T globalArray[])
       myHeight = height;
     }
   }
-  printf("Process #%d Finished \n", id);
+  // printf("Process #%d Finished \n", id);
   if (id == 0) globalArray = half1;
   return globalArray;
 }
@@ -130,15 +126,9 @@ int run(size_t len, int procs, int option)
 {
   int id; MPI_Comm_rank(MPI_COMM_WORLD, &id);
 
-  char const* datatype;
+  char const* datatype = (typeid(T) == typeid(int)) ? "int" : (typeid(T) == typeid(float)) ? "float" : "unknown";
   int height = __builtin_ctz(procs);
-  if (id == 0) {
-    printf("Number of processors: %d\n", procs);  // THREADS = 256; 
-    printf("Number of values: %d\n", len);  // NUM_VALS = 1024;
-    printf("Height of Tree: %d\n", height);
-    printf("Array Type:\t%s\n", (datatype = (typeid(T) == typeid(int)) ? "int" : (typeid(T) == typeid(float)) ? "float" : "unknown"));
-  }
-
+  
   // Create caliper ConfigManager object
   cali::ConfigManager mgr; mgr.start();
 
@@ -172,7 +162,7 @@ int main(int argc, char *argv[])
   int procs;      MPI_Comm_size(MPI_COMM_WORLD, &procs);
   
   // Run algorithm on given args
-  int res = run<int>(length, procs, option);
+  int res = run<float>(length, procs, option);
 
   MPI_Finalize();
   return res;

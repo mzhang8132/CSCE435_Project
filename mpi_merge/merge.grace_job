@@ -5,9 +5,10 @@
 #
 ##NECESSARY JOB SPECIFICATIONS
 #SBATCH --job-name=JobName       #Set the job name to "JobName"
-#SBATCH --time=00:02:00           #Set the wall clock limit
-#SBATCH --nodes=1               #Request nodes
+#SBATCH --time=00:10:00           #Set the wall clock limit
+#SBATCH --nodes=32               #Request nodes          aim for nodes*2*ntasks = 2*procs
 #SBATCH --mem=8G                 #Request GB per node 
+#SBATCH --ntasks-per-node=32      #Request 32 tasks/cores per node
 #SBATCH --output=%j.log       #Send stdout/err to "[jobID].log" 
 #
 ##OPTIONAL JOB SPECIFICATIONS
@@ -22,6 +23,8 @@ option=$3
 
 module load intel/2020b       # load Intel software stack
 module load CMake/3.12.1
+
+name="merge"
 
 CALI_CONFIG="spot(output=Caliper-MPI/${name}_${processes}-${array_size}-${option}.cali, \
     time.variance)" \

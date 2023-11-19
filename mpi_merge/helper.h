@@ -26,15 +26,15 @@ inline void print_array(T* arr, size_t length, const char* title = "", int id = 
 template<typename T>
 inline void fill_array(T* arr, size_t len, int option)
 { 
-  std::cout << "Filling array with option:" << option << "\n";
+  // std::cout << "Filling array with option:" << option << "\n";
   CALI_MARK_BEGIN("data_init");
   srand(0);
   switch (option)
   {
     case 1: // Random
-      for (int i = 0; i < len; ++i) arr[i] = random(T());    break;
+      for (int i = 0; i < len; ++i) arr[i] = random(T()); break;
     case 2: // Sorted
-      for (int i = 0; i < len; ++i) arr[i] = T(i);           break;
+      for (int i = 0; i < len; ++i) arr[i] = T(i);        break;
     case 3: // Reverse Sorted
       for (int i = 0; i < len; ++i) arr[i] = T(len-1-i);  break;
     case 4: // 1% Perturbed
@@ -56,8 +56,8 @@ inline bool check_dealloc(T* __arr, size_t len)
 
   delete[] __arr;
 
-  if (pass) printf("\t\033[1m\033[92mSORTED\033[0m\n");
-  else printf("\t\033[1m\033[31mNOT SORTED\033[0m\n");
+  // if (pass) printf("\t\033[1m\033[92mSORTED\033[0m\n");
+  // else printf("\t\033[1m\033[31mNOT SORTED\033[0m\n");
   return pass;
 }
 
