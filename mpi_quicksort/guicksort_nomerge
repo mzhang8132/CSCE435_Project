@@ -81,6 +81,18 @@ void quicksort(float* values, int left, int right) {
     quicksort(values, index + 1, left + right - index - 1);
 }
 
+float* merge_sorted(float* arr1, int n1, float* arr2, int n2) {
+    float* result = (float*)malloc((n1 + n2) * sizeof(float));
+    int i = 0, j = 0, k = 0;
+    while (i < n1 && j < n2)
+        result[k++] = arr1[i] < arr2[j] ? arr1[i++] : arr2[j++];
+    while (i < n1)
+        result[k++] = arr1[i++];
+    while (j < n2)
+        result[k++] = arr2[j++];
+    return result;
+}
+
 int check(float* values, int length) {
     for (int i = 1; i < length; ++i) {
         if (values[i] < values[i -1]) {
@@ -126,13 +138,44 @@ int main(int argc, char *argv[]) {
         sorted = (float*)malloc(NUM_VALS * sizeof(float));  
     } 
 
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Gather");
-    MPI_Gather(chunk, chunk_size, MPI_FLOAT, sorted, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Gather");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
+    for (int step = 1; step < numtasks; step *= 2) {
+        int partner = taskid ^ step;
+        if (taskid < partner) {
+            if (partner < numtasks) {
+                int received_chunk_size = (NUM_VALS / numtasks) + ((partner < NUM_VALS % numtasks) ? 1 : 0);
+                float* received_chunk = (float*)malloc(received_chunk_size * sizeof(float));
+
+                CALI_MARK_BEGIN("comm");
+                CALI_MARK_BEGIN("comm_large");
+                CALI_MARK_BEGIN("MPI_Recv");
+                MPI_Recv(received_chunk, received_chunk_size, MPI_FLOAT, partner, 0, MPI_COMM_WORLD, &status);
+                CALI_MARK_END("MPI_Recv");
+                CALI_MARK_END("comm_large");
+                CALI_MARK_END("comm");
+
+                CALI_MARK_BEGIN("comp");
+                CALI_MARK_BEGIN("comp_large");
+                float* new_sorted = merge_sorted(chunk, chunk_size, received_chunk, received_chunk_size);
+                CALI_MARK_END("comp_large");
+                CALI_MARK_END("comp");
+
+                free(chunk);
+                free(received_chunk);
+                chunk = new_sorted;
+                chunk_size += received_chunk_size;
+            }
+        } else {
+            // Send
+            CALI_MARK_BEGIN("comm");
+            CALI_MARK_BEGIN("comm_large");
+            CALI_MARK_BEGIN("MPI_Send");
+            MPI_Send(chunk, chunk_size, MPI_FLOAT, partner, 0, MPI_COMM_WORLD);
+            CALI_MARK_END("MPI_Send");
+            CALI_MARK_END("comm_large");
+            CALI_MARK_END("comm");
+            break;
+        }
+    }
 
     if (taskid == 0) {
         CALI_MARK_BEGIN("correctness_check");

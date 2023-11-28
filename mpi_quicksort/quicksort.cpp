@@ -244,6 +244,5 @@ int main(int argc, char *argv[]) {
     mgr.flush();
 
     MPI_Finalize();
-    
     free(sorted);
 }
