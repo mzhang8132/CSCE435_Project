@@ -24,7 +24,7 @@ int BLOCKS;
 int NUM_VALS;
 int OPTION;
 
-const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
+const char* options[4] = {"sorted", "reverse_sorted", "random", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;

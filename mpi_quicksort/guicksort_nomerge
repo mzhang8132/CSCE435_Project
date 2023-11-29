@@ -17,35 +17,33 @@ a list of sources:
 int NUM_VALS;
 int OPTION;
 
-const char* options[4] = {"sorted", "reverse_sorted", "random", "1%perturbed"};
+const char* options[4] = {"random", "sorted", "reverse_sorted", "1%perturbed"};
 
 float random_float() {
   return (float)rand()/(float)RAND_MAX;
 }
 
-void array_fill(float *arr, int length, int option, int rank, int numtasks) {
-    if (option == 1) { 
-        int start = length * rank;
-        for (int i = 0; i < length; ++i) {
-            arr[i] = (float)(start + i);
-        }
-    } else if (option == 2) {
-        int start = length * (numtasks - rank - 1);
-        for (int i = 0; i < length; ++i) {
-            arr[i] = (float)(start - i);
-        }
-    } else if (option == 3) {
-        srand(MPI_Wtime() * 1000 + rank);
+void array_fill(float *arr, int length, int offset, int option) {
+    if (option == 1) {
+        srand(offset);
         for (int i = 0; i < length; ++i) {
             arr[i] = random_float();
         }
-    } else if (option == 4) {
-        int start = length * rank;
+    } else if (option == 2) {
         for (int i = 0; i < length; ++i) {
-            arr[i] = (float)(start + i);
+            arr[i] = (float)offset+i;
         }
-        srand(MPI_Wtime() * 1000 + rank);
+    } else if (option == 3) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)offset+length-1-i;
+        }
+    } else if (option == 4) {
+        for (int i = 0; i < length; ++i) {
+            arr[i] = (float)i;
+        }
+
         int perturb_count = length / 100;
+        srand(offset);
         for (int i = 0; i < perturb_count; ++i) {
             int index = rand() % length;
             arr[index] = random_float();
@@ -107,114 +105,77 @@ int check(float* values, int length) {
 int main(int argc, char *argv[]) {
     CALI_CXX_MARK_FUNCTION;
 
-    int numtasks, taskid, chunk_size, local_chunk_size;
-    float *data = NULL, *chunk = NULL, *sorted = NULL;
+    int numtasks, taskid, chunk_size;
+    float *chunk = NULL, *sorted = NULL;
 
     NUM_VALS = atoi(argv[1]);
     OPTION = atoi(argv[2]);
 
     MPI_Status status;
 
-    if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
-        fprintf(stderr, "MPI Initialization failed.\n");
-        return -1;
-    }
+    MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
 
     cali::ConfigManager mgr;
     mgr.start();
 
-    data = (float*)malloc(NUM_VALS * sizeof(float));
+    chunk_size = (NUM_VALS / numtasks) + ((taskid < NUM_VALS % numtasks) ? 1 : 0);
+    chunk = (float*)malloc(chunk_size * sizeof(float));
+    int offset = taskid * (NUM_VALS / numtasks);
+
     CALI_MARK_BEGIN("data_init");
-    array_fill(data, NUM_VALS, OPTION, taskid, numtasks);
+    array_fill(chunk, chunk_size, offset, OPTION);
     CALI_MARK_END("data_init");
 
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Barrier");
-    MPI_Barrier(MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Barrier");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
-
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Bcast");
-    MPI_Bcast(&NUM_VALS, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Bcast");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
-
-    chunk_size = (NUM_VALS % numtasks == 0) ? (NUM_VALS / numtasks) : (NUM_VALS / (numtasks - 1));
-    chunk = (float*)malloc(chunk_size * sizeof(float));
-
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Scatter");
-    MPI_Scatter(data, chunk_size, MPI_FLOAT, chunk, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Scatter");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
-
-    free(data);
-    
-    // float *data = NULL;
-    local_chunk_size = (NUM_VALS >= chunk_size * (taskid + 1)) ? chunk_size : (NUM_VALS - chunk_size * taskid);
-    
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    quicksort(chunk, 0, local_chunk_size);
+    quicksort(chunk, 0, chunk_size);
     CALI_MARK_END("comp_large");
     CALI_MARK_END("comp");
     
+    if (taskid == 0) {
+        sorted = (float*)malloc(NUM_VALS * sizeof(float));  
+    } 
+
     for (int step = 1; step < numtasks; step *= 2) {
-        if (taskid % (2 * step) != 0) {
+        int partner = taskid ^ step;
+        if (taskid < partner) {
+            if (partner < numtasks) {
+                int received_chunk_size = (NUM_VALS / numtasks) + ((partner < NUM_VALS % numtasks) ? 1 : 0);
+                float* received_chunk = (float*)malloc(received_chunk_size * sizeof(float));
+
+                CALI_MARK_BEGIN("comm");
+                CALI_MARK_BEGIN("comm_large");
+                CALI_MARK_BEGIN("MPI_Recv");
+                MPI_Recv(received_chunk, received_chunk_size, MPI_FLOAT, partner, 0, MPI_COMM_WORLD, &status);
+                CALI_MARK_END("MPI_Recv");
+                CALI_MARK_END("comm_large");
+                CALI_MARK_END("comm");
+
+                CALI_MARK_BEGIN("comp");
+                CALI_MARK_BEGIN("comp_large");
+                float* new_sorted = merge_sorted(chunk, chunk_size, received_chunk, received_chunk_size);
+                CALI_MARK_END("comp_large");
+                CALI_MARK_END("comp");
+
+                free(chunk);
+                free(received_chunk);
+                chunk = new_sorted;
+                chunk_size += received_chunk_size;
+            }
+        } else {
+            // Send
             CALI_MARK_BEGIN("comm");
             CALI_MARK_BEGIN("comm_large");
             CALI_MARK_BEGIN("MPI_Send");
-            MPI_Send(chunk, local_chunk_size, MPI_FLOAT, taskid - step, 0, MPI_COMM_WORLD);
+            MPI_Send(chunk, chunk_size, MPI_FLOAT, partner, 0, MPI_COMM_WORLD);
             CALI_MARK_END("MPI_Send");
             CALI_MARK_END("comm_large");
             CALI_MARK_END("comm");
             break;
         }
-
-        if (taskid + step < numtasks) {
-            int received_chunk_size = (NUM_VALS >= chunk_size * (taskid + 2 * step)) ? (chunk_size * step) : (NUM_VALS - chunk_size * (taskid + step));
-
-            float* received_chunk = (float*)malloc(received_chunk_size * sizeof(float));
-
-            CALI_MARK_BEGIN("comm");
-            CALI_MARK_BEGIN("comm_large");
-            CALI_MARK_BEGIN("MPI_Recv");
-            MPI_Recv(received_chunk, received_chunk_size, MPI_FLOAT, taskid + step, 0, MPI_COMM_WORLD, &status);
-            CALI_MARK_END("MPI_Recv");
-            CALI_MARK_END("comm_large");
-            CALI_MARK_END("comm");
-
-            CALI_MARK_BEGIN("comp");
-            CALI_MARK_BEGIN("comp_large");
-            sorted = merge_sorted(chunk, local_chunk_size, received_chunk, received_chunk_size);
-            CALI_MARK_END("comp_large");
-            CALI_MARK_END("comp");
-
-            free(chunk);
-            free(received_chunk);
-            chunk = sorted;
-            local_chunk_size += received_chunk_size;
-        }
     }
-
-    sorted = (float*)malloc(NUM_VALS * sizeof(float));  
-
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Gather");
-    MPI_Gather(chunk, local_chunk_size, MPI_FLOAT, sorted, local_chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Gather");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
 
     if (taskid == 0) {
         CALI_MARK_BEGIN("correctness_check");
@@ -237,12 +198,16 @@ int main(int argc, char *argv[]) {
         adiak::value("implementation_source", "Online, Handwritten, and AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
         adiak::value("correctness", correctness); // Whether the dataset has been sorted (0, 1)
 
-        // free(sorted);
     }
     
     mgr.stop();
     mgr.flush();
 
     MPI_Finalize();
-    free(sorted);
+
+    if (taskid == 0) {
+        free(sorted);
+    }
+    
+    free(chunk);
 }
