@@ -1,0 +1,2 @@
+event.output.filename = "mpi_odd_even.cali"
+event.output.format = "caliper"
