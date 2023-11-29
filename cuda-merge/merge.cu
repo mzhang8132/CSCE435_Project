@@ -32,21 +32,24 @@ void recordAdiak(const char* dt, int dt_size, size_t len, int op, int threads, i
 
 template<typename T>
 __device__ inline
-void Merge(T* values, T* result, int left, int middle, int right)
+void Merge(T* values, T* result, int beg, int mid, int end)
 {
-  int i,j,k;
-  i=left; j=middle; k=left;
-  while (i<middle && j<right) { 
-    if (values[i]<=values[j]) {result[k]=values[i]; i++;} 
-    else {result[k]=values[j]; j++;}
-    k++;
+  //        beg               mid             end
+  // values [a . . . . . . . . b . . . . . . . .]
+  // result [c . . . . . . . . . . . . . . . . .]
+  int ai, bi, ri;
+  ai = beg; bi = mid; ri = beg;
+  while (ai<mid && bi<end) { 
+    if (values[ai]<=values[bi]) {result[ri]=values[ai]; ai++;} 
+    else {result[ri]=values[bi]; bi++;}
+    ri++;
   }
   
 
-  while (i<middle) result[k++]=values[i++]; // i++; k++;
-  while (j<right) result[k++]=values[j++]; // j++; k++;
+  while (ai<mid) result[ri++]=values[ai++]; // ai++; ri++;
+  while (bi<end) result[ri++]=values[bi++]; // bi++; ri++;
 
-  for (k=left; k<right; k++) values[k]=result[k];
+  for (int i=beg; i<end; i++) values[i]=result[i];
 }
 
 template<typename T>

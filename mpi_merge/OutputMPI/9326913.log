@@ -1,0 +1,235 @@
+[bstrap:0:-1@c227.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c229 (pid 117792, exit code 49152)
+[bstrap:0:-1@c227.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c227.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c227.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c227.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c227.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+srun: error: c227: task 2: Exited with exit code 5
+[bstrap:0:-1@c227.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 9326913.0 ON c097 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 9326913 ON c097 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.3 ON c101 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 9326913.6 ON c231 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.7 ON c238 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.5 ON c240 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 9326913.4 ON c236 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.11 ON c500 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.16 ON c495 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 9326913.2 ON c614 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.10 ON c606 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.12 ON c608 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 256 PID 94574 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 257 PID 94575 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 258 PID 94576 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 259 PID 94577 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 192 PID 110734 RUNNING AT c230
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 260 PID 94578 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 193 PID 110735 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 261 PID 94579 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 262 PID 94580 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 194 PID 110736 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 263 PID 94581 RUNNING AT c232
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+slurmstepd: error: *** STEP 9326913.13 ON c493 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+slurmstepd: error: *** STEP 9326913.14 ON c611 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 264 PID 94582 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[proxy:0:16@c492.cluster] i_proxy_kill_processes (../../../../../src/pm/i_hydra/proxy/intel/i_proxy.c:490): error sending signal 15 to process
+=   RANK 195 PID 110737 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 265 PID 94583 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 196 PID 110738 RUNNING AT c230
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 266 PID 94584 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 197 PID 110739 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 267 PID 94585 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 198 PID 110740 RUNNING AT c230
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 268 PID 94586 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 269 PID 94587 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 896 PID 90436 RUNNING AT c610
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 270 PID 94588 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 512 PID 125969 RUNNING AT c492
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 576 PID 150431 RUNNING AT c494
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 199 PID 110741 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 271 PID 94589 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 897 PID 90437 RUNNING AT c610
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 200 PID 110742 RUNNING AT c230
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 320 PID 111882 RUNNING AT c235
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 272 PID 94590 RUNNING AT c232
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+slurmstepd: error: *** STEP 9326913.9 ON c233 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326913.1 ON c498 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+[mpiexec@c097.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): 

@@ -1,0 +1,2 @@
+srun: error: c410: task 9: Broken pipe
+[mpiexec@c382.cluster] wait_proxies_to_terminate (../../../../../src/pm/i_hydra/mpiexec/intel/i_mpiexec.c:527): downstream from host c382 exited with status 141
