@@ -1,0 +1,2 @@
+srun: error: c705: task 8: Broken pipe
+[mpiexec@c683.cluster] wait_proxies_to_terminate (../../../../../src/pm/i_hydra/mpiexec/intel/i_mpiexec.c:527): downstream from host c683 exited with status 141

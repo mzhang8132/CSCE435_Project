@@ -1,0 +1,121 @@
+[bstrap:0:-1@c227.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c229 (pid 110081, exit code 49152)
+[bstrap:0:-1@c227.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c227.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c227.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c227.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c227.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c178.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c179 (pid 277865, exit code 49152)
+[bstrap:0:-1@c178.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c178.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c178.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c178.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c178.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+srun: error: c178: task 5: Exited with exit code 5
+[bstrap:0:-1@c178.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+srun: error: c227: task 15: Exited with exit code 5
+[bstrap:0:-1@c227.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+slurmstepd: error: *** STEP 9326606.0 ON c162 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 9326606 ON c162 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.4 ON c170 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.15 ON c175 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.10 ON c167 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.7 ON c203 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.16 ON c206 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.9 ON c177 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.3 ON c211 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.2 ON c208 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.8 ON c214 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.13 ON c225 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.14 ON c216 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.1 ON c221 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326606.12 ON c218 CANCELLED AT 2023-11-17T20:47:27 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 192 PID 116319 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 193 PID 116320 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 194 PID 116321 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 195 PID 116322 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 196 PID 116323 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 576 PID 122691 RUNNING AT c210
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 197 PID 116324 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 577 PID 122692 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   RANK 198 PID 116325 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 199 PID 116326 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 578 PID 122693 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 200 PID 116327 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 579 PID 122694 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+===================================================================================
+=   RANK 201 PID 116328 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 202 PID 116329 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================

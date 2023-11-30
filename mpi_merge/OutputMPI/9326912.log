@@ -1,0 +1,971 @@
+[bstrap:0:-1@c178.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c179 (pid 7743, exit code 49152)
+[bstrap:0:-1@c178.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c178.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c178.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c178.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c178.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+srun: error: c178: task 6: Exited with exit code 5
+[bstrap:0:-1@c178.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+slurmstepd: error: *** STEP 9326912.0 ON c162 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.12 ON c170 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 9326912 ON c162 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.7 ON c173 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.5 ON c167 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.2 ON c177 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.8 ON c175 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.13 ON c203 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.15 ON c208 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.9 ON c211 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.4 ON c214 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.10 ON c206 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.14 ON c221 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.6 ON c218 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.16 ON c216 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 9326912.1 ON c225 CANCELLED AT 2023-11-17T22:58:40 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 192 PID 124312 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 193 PID 124313 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 194 PID 124314 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 195 PID 124315 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 196 PID 124316 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 197 PID 124317 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 320 PID 113029 RUNNING AT c176
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 198 PID 124318 RUNNING AT c172
+=   RANK 321 PID 113030 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 322 PID 113031 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 199 PID 124319 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 323 PID 113032 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 324 PID 113033 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 200 PID 124320 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 325 PID 113034 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 201 PID 124321 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 326 PID 113035 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 327 PID 113036 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 202 PID 124322 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 328 PID 113037 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 329 PID 113038 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 203 PID 124323 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 330 PID 113039 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 331 PID 113040 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 204 PID 124324 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 332 PID 113041 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 205 PID 124325 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   RANK 333 PID 113042 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 334 PID 113043 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 206 PID 124326 RUNNING AT c172
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 335 PID 113044 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 256 PID 200023 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 768 PID 134086 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 336 PID 113045 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 207 PID 124327 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 257 PID 200024 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 769 PID 134087 RUNNING AT c215
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 337 PID 113046 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 208 PID 124328 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 258 PID 200025 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 338 PID 113047 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 770 PID 134088 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 339 PID 113048 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 209 PID 124329 RUNNING AT c172
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 259 PID 200026 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 340 PID 113049 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 771 PID 134089 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 341 PID 113050 RUNNING AT c176
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 210 PID 124330 RUNNING AT c172
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 260 PID 200027 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 772 PID 134090 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 342 PID 113051 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 211 PID 124331 RUNNING AT c172
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 261 PID 200028 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 773 PID 134091 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   RANK 343 PID 113052 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 212 PID 124332 RUNNING AT c172
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 262 PID 200029 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 344 PID 113053 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+=   RANK 774 PID 134092 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 345 PID 113054 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 213 PID 124333 RUNNING AT c172
+
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 263 PID 200030 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 775 PID 134093 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 346 PID 113055 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+=   RANK 214 PID 124334 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 347 PID 113056 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 264 PID 200031 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 776 PID 134094 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 348 PID 113057 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 215 PID 124335 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 349 PID 113058 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 265 PID 200032 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 777 PID 134095 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 350 PID 113059 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 216 PID 124336 RUNNING AT c172
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 266 PID 200033 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 778 PID 134096 RUNNING AT c215
+=   RANK 351 PID 113060 RUNNING AT c176
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 217 PID 124337 RUNNING AT c172
+
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 267 PID 200034 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 779 PID 134097 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 218 PID 124338 RUNNING AT c172
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+=   RANK 780 PID 134098 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 268 PID 200035 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 219 PID 124339 RUNNING AT c172
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 781 PID 134099 RUNNING AT c215
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 269 PID 200036 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 782 PID 134100 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 270 PID 200037 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 640 PID 130703 RUNNING AT c210
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 271 PID 200038 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 783 PID 134101 RUNNING AT c215
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 641 PID 130704 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 272 PID 200039 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 784 PID 134102 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 642 PID 130705 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 273 PID 200040 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 785 PID 134103 RUNNING AT c215
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 786 PID 134104 RUNNING AT c215
+=   RANK 643 PID 130706 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 274 PID 200041 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 644 PID 130707 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 275 PID 200042 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 787 PID 134105 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 645 PID 130708 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 646 PID 130709 RUNNING AT c210
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 276 PID 200043 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 788 PID 134106 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 647 PID 130710 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 277 PID 200044 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 789 PID 134107 RUNNING AT c215
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 648 PID 130711 RUNNING AT c210
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 278 PID 200045 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 790 PID 134108 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 791 PID 134109 RUNNING AT c215
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 649 PID 130712 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   RANK 279 PID 200046 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 280 PID 200047 RUNNING AT c174
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 792 PID 134110 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 650 PID 130713 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 651 PID 130714 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 652 PID 130715 RUNNING AT c210
+=   RANK 281 PID 200048 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 793 PID 134111 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 282 PID 200049 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 794 PID 134112 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 795 PID 134113 RUNNING AT c215
+=   RANK 653 PID 130716 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 283 PID 200050 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 654 PID 130717 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 796 PID 134114 RUNNING AT c215
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 284 PID 200051 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 797 PID 134115 RUNNING AT c215
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 655 PID 130718 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 285 PID 200052 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+===================================================================================
+
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 798 PID 134116 RUNNING AT c215
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 656 PID 130719 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 286 PID 200053 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 799 PID 134117 RUNNING AT c215
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 657 PID 130720 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 287 PID 200054 RUNNING AT c174
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+[mpiexec@c162.cluster] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:360): write error (Bad file descriptor)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 658 PID 130721 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 659 PID 130722 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 660 PID 130723 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 661 PID 130724 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 662 PID 130725 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 663 PID 130726 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 664 PID 130727 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 665 PID 130728 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 666 PID 130729 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 667 PID 130730 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 668 PID 130731 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 669 PID 130732 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 670 PID 130733 RUNNING AT c210
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
