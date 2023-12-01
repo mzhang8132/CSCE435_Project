@@ -423,11 +423,57 @@ Analyze these plots and choose a subset to present and explain in your presentat
 
 **MPI Merge Sort**
 
+!["mpi merge strong scaling"](./mpi_merge/Plots-MPI/strong_scaling.svg)
 
+From the strong scaling plots for the MPI implementation of merge sort, we can see that generally for smaller problem sizes increasing the number of processes will increase the runtime of the program. However, once we get to larger data set sizes, like $2^{24}$ and up, we can see that adding processors can help runtime, but has a trade off. The sweet spot typically sits around $2^6 - 2^7$, after which the runtime begins to increase again. This is certainly intresting and highlights the amount of communication that occurs during an algorithm like MergeSort. 
+
+!["mpi merge strong scaling speedup"](./mpi_merge/Plots-MPI/strong_scaling_speedup.svg)
+
+The strong scaling speedup plots allow us to observe that the MPI implementation of merge sort performs well with more threads for larger problem sizes like $2^{26}$ and $2^{28}$, while smaller problem sizes are negatively effected. This mirrors our conclusions made from the Strong Scaling plots, that "for smaller problem sizes increasing the number of processes will increase the runtime of the program". This is also highlighted by the "sweet-spot" on larger data set sizes being in the $2^6 - 2^7$ region, as we can see that sweet-spot on these Speedup graphs as well.
+
+!["mpi merge weak scaling"](./mpi_merge/Plots-MPI/weak_scaling.svg)
+
+For weak scaling, we can see that our implementation of MPI Merge Sort does not scale well for large or small "jobs per thread", as both trends are near linear. This implies that a redesign of the implementation is needed, or simply put—merge sort is not the optimal sorting algorithm for something like MPI, requiring too much inter-process communication to be viable.
+
+!["mpi merge comm comp"](./mpi_merge/Plots-MPI/comm_comp.svg)
+
+The communication vs computation graphs for the MPI Merge sort implementation really help the reader understand the afflictions of our MPI merge sort. One can clearly observe the downward trend of the computation graphs, showing that as the work is divided, the program spends less time computing, which is good. However, in contrast, the communication trends are linear in the opposite direciton, clearly showing the biggest problem with MPI Merge sort, as it spends too much time communicating.
 
 **CUDA Merge Sort**
 
+!["cuda merge strong scaling"](./cuda-merge/Plots-CUDA/strong_scaling.svg)
 
+The Strong Scaling plots for our CUDA implementation of Merge sort allow us to come to interesting realizations relating to our algorithm. For the smallest data set sizes, we can see that the algorithm is benefitted by increasing the number of threads, while for the large data set sizes, the runtime is largely unnafected. This is certainly interesting and will require more information, hopefully provided by the speedup graphs.
+
+!["cuda merge strong scaling speedup"](./cuda-merge/Plots-CUDA/strong_scaling_speedup.svg)
+
+These speedup graphs allow us to understand that the smaller data set sizes truly benefit much more from larger numbers of threads than than the larger dataset sizes do. This might be an indication that the algorithm does not scale well, but we would need to look at the weak scaling graphs to make those determinations.
+
+!["cuda merge weak scaling"](./cuda-merge/Plots-CUDA/weak_scaling.svg)
+
+The weak scaling graphs do allow us to determine that for small data set sizes, the algorithm definitely scales well, but for larger data set size the trend is near linear indicating that the algorithm does not scale well for larger data set sizes.
+
+!["2^16 comm comp"](./cuda-merge/Plots-CUDA/65536_comm_comp.svg)
+!["2^18 comm comp"](./cuda-merge/Plots-CUDA/262144_comm_comp.svg)
+!["2^20 comm comp"](./cuda-merge/Plots-CUDA/1048576_comm_comp.svg)
+!["2^22 comm comp"](./cuda-merge/Plots-CUDA/4194304_comm_comp.svg)
+!["2^24 comm comp"](./cuda-merge/Plots-CUDA/16777216_comm_comp.svg)
+!["2^26 comm comp"](./cuda-merge/Plots-CUDA/67108864_comm_comp.svg)
+!["2^28 comm comp"](./cuda-merge/Plots-CUDA/268435456_comm_comp.svg)
+
+
+These plots allow us to understand where our algorithm is spending more time, and we can clearly see that our algorithm is very effecient. Regardless of data set size, the communication is consistently several orders of magnitude higher than the computation, both for the CPU and the GPU. This is not due to a large amount of time communicating, as there was 1 communication to and from the GPU (cudaMemcpy), but rather due to the high efficiency of the GPU sorting algorithm.
+
+!["2^16 cpu gpu"](./cuda-merge/Plots-CUDA/65536_main.svg)
+!["2^18 cpu gpu"](./cuda-merge/Plots-CUDA/262144_main.svg)
+!["2^20 cpu gpu"](./cuda-merge/Plots-CUDA/1048576_main.svg)
+!["2^22 cpu gpu"](./cuda-merge/Plots-CUDA/4194304_main.svg)
+!["2^24 cpu gpu"](./cuda-merge/Plots-CUDA/16777216_main.svg)
+!["2^26 cpu gpu"](./cuda-merge/Plots-CUDA/67108864_main.svg)
+!["2^28 cpu gpu"](./cuda-merge/Plots-CUDA/268435456_main.svg)
+
+
+These CPU vs GPU graphs only further corroborate the speed of the GPU sorting algorithm, as the CPU was consistently timed taking much more time than the GPU. This is most likely due to setup, allocation, communication, deallocation, and correctness checking all taking place on the CPU, while the GPU was simply sorting.
 
 **MPI Quick Sort**
 
@@ -480,11 +526,44 @@ Based on the graphs, there's a clear trend that the GPU consistently outperforms
 
 **MPI Bitonic Sort**
 
+!["mpi bitonic strong scaling"](./mpi_bitonic/mpi_bitonic_graph/strong_scaling.png)
+
+Looking at the strong scaling graphs, we can see that for fixed problem sizes, increasing the problem size generally improves performance up to a point. That breaking point seems to be at $2^{8}$ threads at the smaller problem sizes and $2^{9}$ at the largest sizes. This difference could likely be attributed to the balance required to have enough work to occupy all of the processes and minimize idle time. Additionally, it can be generally noted that the reverse sorted sorts performed extremely well with only 2 processes at most of the problem sizes. This indicates that the communication overhead in the implementation needs much more optimization to sort these kinds of lists efficiently with parallelism. However, it is to be noted that at the largest problem size, we see the best representation of strong scaling. This shows that the algorithm strong scales well across all input types at very large problem sizes, which is very good to see!
+
+!["mpi bitonic strong scaling speedup"](./mpi_bitonic/mpi_bitonic_graph/strong_scaling_speedup.png)
+
+The speedup is the greatest at the largest problem size across all input types. This is in line with our analysis of the strong scaling graphs. For the largest problem size, we can see that the speedup is at the maximum generally at $2^{9}$ or $2^{8}$ before falling off at $2^{10}$. An interesting insight can be seen between the input types. The only input type that had a positive speedup trend for all problem sizes is the random input. Additionally the speedup found here was of the largest magnitude. For the other input types, there seems to be a problem size threshold needed in order to gain a positive trend in the speedup as the processes increase.
+
+!["mpi bitonic weak scaling"](./mpi_bitonic/mpi_bitonic_graph/weak_scaling.png)
+
+Looking at weak scaling, we see a general tend towards performance increase moving from $2^{6}$ to $2^{8}$ processes at both the largest problem size and smallest. However we see a sharp decrease in performance as we move to $2^{10}$ processes for both the largest and smallest problem sizes. This seems to be the limit for this implementation
+
+!["mpi bitonic comm comp"](./mpi_bitonic/mpi_bitonic_graph/comm_comp.png)
+
+Analyzing the communication vs. computation graphs we can see that computation consumes more time across the board. There isn't a point where communication takes more time than the actual computation. Additionally we don't see a convincing total positive performance increase from process size increase until we get to the larger problem sizes (starting at $2^{24}$). We can see the best trend in performance increase as process size increases at the problem size $2^{28}$ up until the $2^{10}$ processes point.
 
 
 **CUDA Bitonic Sort**
 
+!["cuda bitonic strong scaling"](./cuda_bitonic/cuda_bitonic_graph/strong_scaling.png)
 
+In the smaller problem sizes, we see that as the thread count increases, performance increases up to about the $2^{8}$ point. In the larget problem sizes, the performance increases futher to around the $2^{9}$ point.Generally speaking, the program scales well as the thread count increases with constant problem sizes. Additionally, it should be noted that the random input type generally performs much worse than the other input types.
+
+!["cuda bitonic strong scaling speedup"](./cuda_bitonic/cuda_bitonic_graph/strong_scaling_speedup.png)
+
+For nearly all problem sizes on every input type, we see a positive strong scaling speedup. These graphs show confidently that the algorithm scales strongly. Additionally, the largest problem size generally represents the largest magnitude of speedup for each input type.
+
+!["cuda bitonic weak scaling"](./cuda_bitonic/cuda_bitonic_graph/weak_scaling.png)
+
+Looking at the weak scaling of the algorithm, it scales extremely well at the lowest problem size, as it looks nearly constant. However, the largest problem size doesn't show as optimal behavior as the lower problem size. This would indicate that the largest problem size passes the optimal 'saturation' state of the GPU as we don't see the optimal behavior at this problem size.
+
+!["2^28 comm comp"](./cuda_bitonic/cuda_bitonic_graph/268435456_comm_comp.png)
+
+Across the board we can see that most of the runtime is being consumed in the computation phase. Communication takes a small fraction of the time in comparison to the computation. Additionally, the computation being performed on the CPU is taking the greatest amount of time. This is likely at the cudaDeviceSynchronize() call that requires a certain amount of idling as the resources synchronize.
+
+!["2^28 cpu gpu"](./cuda_bitonic/cuda_bitonic_graph/268435456_main.png)
+
+We can see the previous point reflected in the CPU vs GPU time. The CPU is consuming much more time and decreasing the performance of the algorithm much more than the GPU. Additionally, the verification step is performed entirely on the CPU and can be a major reason as to why the CPU is consuming so much time.
 
 **MPI Odd Even Sort**
 
@@ -536,7 +615,7 @@ From the distributation of time spent on the CPU and GPU, we can gather that a m
 
 !["mpi team strong scaling comparison"](./mpi_team_graph/strong_scaling.png)
 
-For the MPI implementations, we see that quicksort performs the best regardless of problem size and thread count. This is then followed up by odd even, then merge, and finally bitonic. However quicksort appears to hit the limit where more threads cause an in crease in run time much faster than the other 3 algorithms.
+For the MPI implementations, we see that quicksort performs the best regardless of problem size and thread count. This is then followed up by odd even, then merge, and finally bitonic. However quicksort appears to hit the limit where more threads cause an increase in run time much faster than the other 3 algorithms.
 
 **CUDA Team Comparison**
 
