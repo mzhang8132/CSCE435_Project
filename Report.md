@@ -423,11 +423,57 @@ Analyze these plots and choose a subset to present and explain in your presentat
 
 **MPI Merge Sort**
 
+!["mpi merge strong scaling"](./mpi_merge/Plots-MPI/strong_scaling.svg)
 
+From the strong scaling plots for the MPI implementation of merge sort, we can see that generally for smaller problem sizes increasing the number of processes will increase the runtime of the program. However, once we get to larger data set sizes, like $2^{24}$ and up, we can see that adding processors can help runtime, but has a trade off. The sweet spot typically sits around $2^6 - 2^7$, after which the runtime begins to increase again. This is certainly intresting and highlights the amount of communication that occurs during an algorithm like MergeSort. 
+
+!["mpi merge strong scaling speedup"](./mpi_merge/Plots-MPI/strong_scaling_speedup.svg)
+
+The strong scaling speedup plots allow us to observe that the MPI implementation of merge sort performs well with more threads for larger problem sizes like $2^{26}$ and $2^{28}$, while smaller problem sizes are negatively effected. This mirrors our conclusions made from the Strong Scaling plots, that "for smaller problem sizes increasing the number of processes will increase the runtime of the program". This is also highlighted by the "sweet-spot" on larger data set sizes being in the $2^6 - 2^7$ region, as we can see that sweet-spot on these Speedup graphs as well.
+
+!["mpi merge weak scaling"](./mpi_merge/Plots-MPI/weak_scaling.svg)
+
+For weak scaling, we can see that our implementation of MPI Merge Sort does not scale well for large or small "jobs per thread", as both trends are near linear. This implies that a redesign of the implementation is needed, or simply put—merge sort is not the optimal sorting algorithm for something like MPI, requiring too much inter-process communication to be viable.
+
+!["mpi merge comm comp"](./mpi_merge/Plots-MPI/comm_comp.svg)
+
+The communication vs computation graphs for the MPI Merge sort implementation really help the reader understand the afflictions of our MPI merge sort. One can clearly observe the downward trend of the computation graphs, showing that as the work is divided, the program spends less time computing, which is good. However, in contrast, the communication trends are linear in the opposite direciton, clearly showing the biggest problem with MPI Merge sort, as it spends too much time communicating.
 
 **CUDA Merge Sort**
 
+!["cuda merge strong scaling"](./cuda-merge/Plots-CUDA/strong_scaling.svg)
 
+The Strong Scaling plots for our CUDA implementation of Merge sort allow us to come to interesting realizations relating to our algorithm. For the smallest data set sizes, we can see that the algorithm is benefitted by increasing the number of threads, while for the large data set sizes, the runtime is largely unnafected. This is certainly interesting and will require more information, hopefully provided by the speedup graphs.
+
+!["cuda merge strong scaling speedup"](./cuda-merge/Plots-CUDA/strong_scaling_speedup.svg)
+
+These speedup graphs allow us to understand that the smaller data set sizes truly benefit much more from larger numbers of threads than than the larger dataset sizes do. This might be an indication that the algorithm does not scale well, but we would need to look at the weak scaling graphs to make those determinations.
+
+!["cuda merge weak scaling"](./cuda-merge/Plots-CUDA/weak_scaling.svg)
+
+The weak scaling graphs do allow us to determine that for small data set sizes, the algorithm definitely scales well, but for larger data set size the trend is near linear indicating that the algorithm does not scale well for larger data set sizes.
+
+!["2^16 comm comp"](./cuda-merge/Plots-CUDA/65536_comm_comp.svg)
+!["2^18 comm comp"](./cuda-merge/Plots-CUDA/262144_comm_comp.svg)
+!["2^20 comm comp"](./cuda-merge/Plots-CUDA/1048576_comm_comp.svg)
+!["2^22 comm comp"](./cuda-merge/Plots-CUDA/4194304_comm_comp.svg)
+!["2^24 comm comp"](./cuda-merge/Plots-CUDA/16777216_comm_comp.svg)
+!["2^26 comm comp"](./cuda-merge/Plots-CUDA/67108864_comm_comp.svg)
+!["2^28 comm comp"](./cuda-merge/Plots-CUDA/268435456_comm_comp.svg)
+
+
+These plots allow us to understand where our algorithm is spending more time, and we can clearly see that our algorithm is very effecient. Regardless of data set size, the communication is consistently several orders of magnitude higher than the computation, both for the CPU and the GPU. This is not due to a large amount of time communicating, as there was 1 communication to and from the GPU (cudaMemcpy), but rather due to the high efficiency of the GPU sorting algorithm.
+
+!["2^16 cpu gpu"](./cuda-merge/Plots-CUDA/65536_main.svg)
+!["2^18 cpu gpu"](./cuda-merge/Plots-CUDA/262144_main.svg)
+!["2^20 cpu gpu"](./cuda-merge/Plots-CUDA/1048576_main.svg)
+!["2^22 cpu gpu"](./cuda-merge/Plots-CUDA/4194304_main.svg)
+!["2^24 cpu gpu"](./cuda-merge/Plots-CUDA/16777216_main.svg)
+!["2^26 cpu gpu"](./cuda-merge/Plots-CUDA/67108864_main.svg)
+!["2^28 cpu gpu"](./cuda-merge/Plots-CUDA/268435456_main.svg)
+
+
+These CPU vs GPU graphs only further corroborate the speed of the GPU sorting algorithm, as the CPU was consistently timed taking much more time than the GPU. This is most likely due to setup, allocation, communication, deallocation, and correctness checking all taking place on the CPU, while the GPU was simply sorting.
 
 **MPI Quick Sort**
 
