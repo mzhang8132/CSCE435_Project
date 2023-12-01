@@ -81,18 +81,6 @@ void quicksort(float* values, int left, int right) {
     quicksort(values, index + 1, left + right - index - 1);
 }
 
-float* merge_sorted(float* arr1, int n1, float* arr2, int n2) {
-    float* result = (float*)malloc((n1 + n2) * sizeof(float));
-    int i = 0, j = 0, k = 0;
-    while (i < n1 && j < n2)
-        result[k++] = arr1[i] < arr2[j] ? arr1[i++] : arr2[j++];
-    while (i < n1)
-        result[k++] = arr1[i++];
-    while (j < n2)
-        result[k++] = arr2[j++];
-    return result;
-}
-
 int check(float* values, int length) {
     for (int i = 1; i < length; ++i) {
         if (values[i] < values[i -1]) {
@@ -105,8 +93,8 @@ int check(float* values, int length) {
 int main(int argc, char *argv[]) {
     CALI_CXX_MARK_FUNCTION;
 
-    int numtasks, taskid, chunk_size, local_chunk_size;
-    float *data = NULL, *chunk = NULL, *sorted = NULL;
+    int numtasks, taskid, chunk_size;
+    float *chunk = NULL, *sorted = NULL;
 
     NUM_VALS = atoi(argv[1]);
     OPTION = atoi(argv[2]);
@@ -120,87 +108,28 @@ int main(int argc, char *argv[]) {
     cali::ConfigManager mgr;
     mgr.start();
 
-    data = (float*)malloc(NUM_VALS * sizeof(float));
+    chunk_size = (NUM_VALS / numtasks) + ((taskid < NUM_VALS % numtasks) ? 1 : 0);
+    chunk = (float*)malloc(chunk_size * sizeof(float));
+    int offset = taskid * (NUM_VALS / numtasks);
+
     CALI_MARK_BEGIN("data_init");
-    array_fill(data, NUM_VALS, 0, OPTION);
+    array_fill(chunk, chunk_size, offset, OPTION);
     CALI_MARK_END("data_init");
 
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Bcast");
-    MPI_Bcast(&NUM_VALS, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Bcast");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
-
-    chunk_size = (NUM_VALS % numtasks == 0) ? (NUM_VALS / numtasks) : (NUM_VALS / (numtasks - 1));
-    chunk = (float*)malloc(chunk_size * sizeof(float));
-
-    CALI_MARK_BEGIN("comm");
-    CALI_MARK_BEGIN("comm_large");
-    CALI_MARK_BEGIN("MPI_Scatter");
-    MPI_Scatter(data, chunk_size, MPI_FLOAT, chunk, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END("MPI_Scatter");
-    CALI_MARK_END("comm_large");
-    CALI_MARK_END("comm");
-
-    free(data);
-    
-    // float *data = NULL;
-    local_chunk_size = (NUM_VALS >= chunk_size * (taskid + 1)) ? chunk_size : (NUM_VALS - chunk_size * taskid);
-    
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
-    quicksort(chunk, 0, local_chunk_size);
+    quicksort(chunk, 0, chunk_size);
     CALI_MARK_END("comp_large");
     CALI_MARK_END("comp");
-    
-    for (int step = 1; step < numtasks; step *= 2) {
-        if (taskid % (2 * step) != 0) {
-            CALI_MARK_BEGIN("comm");
-            CALI_MARK_BEGIN("comm_large");
-            CALI_MARK_BEGIN("MPI_Send");
-            MPI_Send(chunk, local_chunk_size, MPI_FLOAT, taskid - step, 0, MPI_COMM_WORLD);
-            CALI_MARK_END("MPI_Send");
-            CALI_MARK_END("comm_large");
-            CALI_MARK_END("comm");
-            break;
-        }
 
-        if (taskid + step < numtasks) {
-            int received_chunk_size = (NUM_VALS >= chunk_size * (taskid + 2 * step))
-                              ? (chunk_size * step)
-                              : (NUM_VALS - chunk_size * (taskid + step));
-
-            float* received_chunk = (float*)malloc(received_chunk_size * sizeof(float));
-
-            CALI_MARK_BEGIN("comm");
-            CALI_MARK_BEGIN("comm_large");
-            CALI_MARK_BEGIN("MPI_Recv");
-            MPI_Recv(received_chunk, received_chunk_size, MPI_FLOAT, taskid + step, 0, MPI_COMM_WORLD, &status);
-            CALI_MARK_END("MPI_Recv");
-            CALI_MARK_END("comm_large");
-            CALI_MARK_END("comm");
-
-            CALI_MARK_BEGIN("comp");
-            CALI_MARK_BEGIN("comp_large");
-            sorted = merge_sorted(chunk, local_chunk_size, received_chunk, received_chunk_size);
-            CALI_MARK_END("comp_large");
-            CALI_MARK_END("comp");
-
-            free(chunk);
-            free(received_chunk);
-            chunk = sorted;
-            local_chunk_size += received_chunk_size;
-        }
-    }
-
-    sorted = (float*)malloc(NUM_VALS * sizeof(float));  
+    if (taskid == 0) {
+        sorted = (float*)malloc(NUM_VALS * sizeof(float));  
+    } 
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
     CALI_MARK_BEGIN("MPI_Gather");
-    MPI_Gather(chunk, local_chunk_size, MPI_FLOAT, sorted, local_chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    MPI_Gather(chunk, chunk_size, MPI_FLOAT, sorted, chunk_size, MPI_FLOAT, 0, MPI_COMM_WORLD);
     CALI_MARK_END("MPI_Gather");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
@@ -226,13 +155,16 @@ int main(int argc, char *argv[]) {
         adiak::value("implementation_source", "Online, Handwritten, and AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
         adiak::value("correctness", correctness); // Whether the dataset has been sorted (0, 1)
 
-        // free(sorted);
     }
-    
+
     mgr.stop();
     mgr.flush();
 
     MPI_Finalize();
-    free(sorted);
-}
 
+    if (taskid == 0) {
+        free(sorted);
+    }
+
+    free(chunk);
+}
