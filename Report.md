@@ -477,7 +477,7 @@ These CPU vs GPU graphs only further corroborate the speed of the GPU sorting al
 
 **MPI Quick Sort**
 
-!["mpi quicksort strong scaling"](./mpi_quicksort/mpi_odd_even_graph/strong_scaling.png)
+!["mpi quicksort strong scaling"](./mpi_quicksort/mpi_quicksort_graph/strong_scaling.png)
 
 Based on the strong scaling plots for the MPI quicksort, we can see that we with the smal number of threads (with $2^{4}$), the runtime descreases as we use more threads. This shows that the algorithm is benefiting from parallelism. After certain number of threads, the runtime starts to plateau or even increase, which sugests that the overhead of synchronization and communication is outweighting the benefits of parallelism. With the larger problem siuze, the overhead behavior becomes more pronounced. For example, with problem size $2^{28}$, the time descreases uo to $2^{7}$, then it increases again. The behavior of different input types also have different affect on parallelism. For a sorted or reverse sorted arrays, the runtime increases significantly. Overall, we can observe that while MPI can reduce runtime for quicksort for certain problem sizes and thread counts, there is a limit to benefit of parallelization. 
 
@@ -495,32 +495,32 @@ For comm vs comp graph, as the number of threads increases, computation time dec
 
 **CUDA Quick Sort**
 
-!["cuda quicksort strong scaling"](./cuda_quicksort/cuda_quicksort_graph/strong_scaling.png)
+!["cuda quicksort strong scaling"](./cuda-quicksort/cuda_quicksort_graph/strong_scaling.png)
 
 I would like to note that my algorithm was only able to scale it til problem size of 2^22 only for CUDA. 
 From the strong scaling plots, the execution time decreases with the addition of more threads for larger problem sizes, which shows the effective parallelization. However, there is a threshold where adding more threads ceases to benefit and can even hinder performance. This could be due to the overheads which limit the parallelism. For smaller problem sizes, the execution time shows inconsistent behavior, which suggests that the overhead of parallelization negates the benefits when the dataset is not sufficiently large. 
 
 
-!["cuda quicksort strong scaling speedup"](./cuda_quicksort/cuda_quicksort_graph/strong_scaling_speedup.png)
+!["cuda quicksort strong scaling speedup"](./cuda-quicksort/cuda_quicksort_graph/strong_scaling_speedup.png)
 
 Looking at the graphs, it show that speedup increases with more threads to a point, after which it plateaus or decreases, indicating an optimal parallelism threshold. The trend varies across different input types, suggesting that data arrangement affects the efficiency gains from parallel processing.
 
-!["cuda quicksort weak scaling"](./cuda_quicksort/cuda_quicksort_graph/weak_scaling.png)
+!["cuda quicksort weak scaling"](./cuda-quicksort/cuda_quicksort_graph/weak_scaling.png)
 
 The weak scaling graphs show a rise in execution time for both workload scenarios, with a steeper increase for the higher workload (4096 jobs per thread). This menans that as the complexity of the problem grows, the overhead in parallel processing become more pronounced. This is a consistent trend across different data types.
 
 
-!["2^16 comm comp"](./cuda_quicksort/cuda_quicksort_graph/65536_comm_comp.png)
-!["2^18 comm comp"](./cuda_quicksort/cuda_quicksort_graph/262144_comm_comp.png)
-!["2^20 comm comp"](./cuda_quicksort/cuda_quicksort_graph/1048576_comm_comp.png)
-!["2^22 comm comp"](./cuda_quicksort/cuda_quicksort_graph/4194304_comm_comp.png)
+!["2^16 comm comp"](./cuda-quicksort/cuda_quicksort_graph/65536_comm_comp.png)
+!["2^18 comm comp"](./cud-_quicksort/cuda_quicksort_graph/262144_comm_comp.png)
+!["2^20 comm comp"](./cuda-quicksort/cuda_quicksort_graph/1048576_comm_comp.png)
+!["2^22 comm comp"](./cuda-quicksort/cuda_quicksort_graph/4194304_comm_comp.png)
 
 The graphs suggest a consistent trend: computation time on the GPU remains significantly lower than on the CPU across all problem sizes, highlighting the computational efficiency of the GPU. Also, communication time is generally higher on the GPU than the CPU, which indicates the overhead associated with data transfer between host and device. This trend is the same regardless of the data size, which shows the importance of optimizing data transfer to observe GPU acceleration in CUDA applications.
 
-!["2^16 cpu gpu"](./cuda_quicksort/cuda_quicksort_graph/65536_main.png)
-!["2^18 cpu gpu"](./cuda_quicksort/cuda_quicksort_graph/262144_main.png)
-!["2^20 cpu gpu"](./cuda_quicksort/cuda_quicksort_graph/1048576_main.png)
-!["2^22 cpu gpu"](./cuda_quicksort/cuda_quicksort_graph/4194304_main.png)
+!["2^16 cpu gpu"](./cuda-quicksort/cuda_quicksort_graph/65536_main.png)
+!["2^18 cpu gpu"](./cuda-quicksort/cuda_quicksort_graph/262144_main.png)
+!["2^20 cpu gpu"](./cuda-quicksort/cuda_quicksort_graph/1048576_main.png)
+!["2^22 cpu gpu"](./cuda-quicksort/cuda_quicksort_graph/4194304_main.png)
 
 Based on the graphs, there's a clear trend that the GPU consistently outperforms the CPU in execution time across all data sizes and types. The performance gain of the GPU is more pronounced as the problem size increases, demonstrating the better scalability of parallel processing on the GPU. However, for certain thread configurations, we see spikes in GPU execution time. This could mean  that there are optimal thread counts for different problem sizes. 
 
