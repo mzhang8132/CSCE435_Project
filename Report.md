@@ -511,7 +511,7 @@ The weak scaling graphs show a rise in execution time for both workload scenario
 
 
 !["2^16 comm comp"](./cuda-quicksort/cuda_quicksort_graph/65536_comm_comp.png)
-!["2^18 comm comp"](./cud-_quicksort/cuda_quicksort_graph/262144_comm_comp.png)
+!["2^18 comm comp"](./cuda-quicksort/cuda_quicksort_graph/262144_comm_comp.png)
 !["2^20 comm comp"](./cuda-quicksort/cuda_quicksort_graph/1048576_comm_comp.png)
 !["2^22 comm comp"](./cuda-quicksort/cuda_quicksort_graph/4194304_comm_comp.png)
 
