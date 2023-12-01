@@ -491,6 +491,18 @@ From looking at the distribution between the between the time spent doing comput
 
 From the distributation of time spent on the CPU and GPU, we can gather that a majority of the time is spent on the CPU side. This dominance of the CPU in the run time is understandable as the CPU has to communicate with the GPU then wait for the GPU to perform computations for sorting then communicate the values back. For larger problem sizes, $2^{18}$ and above, we see that with more threads the GPU gains a decreased runtime, which in turn also leads to a decrease CPU runtime. Hoever for the smallest problem size, there appears to not be enough operations to satisfy the GPU to cause a decrease in runtime with the use of more threads.
 
+**MPI Team Comparison**
+
+!["mpi team strong scaling comparison"](./mpi_team_graph/strong_scaling.png)
+
+For the MPI implementations, we see that quicksort performs the best regardless of problem size and thread count. This is then followed up by odd even, then merge, and finally bitonic. However quicksort appears to hit the limit where more threads cause an in crease in run time much faster than the other 3 algorithms.
+
+**CUDA Team Comparison**
+
+!["cuda team strong scaling comparison"](./cuda_team_graph/strong_scaling.png)
+
+From comparing the strong scaling performance of the CUDA implementations of bitonic, odd even, merge, and quick sort on random inputs, we can see that merge and bitonic sorts perform the best. For larger problem sizes we can see that odd even sort will have slightly better performance with the use of more threads, while quicksort has a consistant runtime regardless of the number of threads. Merge sort appears to perform the best and its line is just slightly underneath the line for bitonic sort.
+
 ## 6. Final Report
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
 - Algorithms: Directory of source code of your algorithms.
