@@ -471,7 +471,25 @@ From the strong scaling plots for the CUDA implementation of odd even sort, we c
 
 !["cuda odd even strong scaling speedup"](./cuda_odd_even/cuda_odd_even_graph/strong_scaling_speedup.png)
 
+The CUDA implemenation of odd even sort, receives the most about of speedup with regards to strong scaling for larger problem sizes. For smaller problem size the strong scaling speedup with the use of more threads is increasing but a a much smaller scale than for larger problem sizes. In addition across all the problem size available in the CUDA implementation, they receive a better speed up than the MPI implementation of odd even sort.
+
 !["cuda odd even weak scaling"](./cuda_odd_even/cuda_odd_even_graph/weak_scaling.png)
+
+In terms of weak scaling, the CUDA implementation of odd even sort does not scale well as none of the plotted lines are horizontal.
+
+!["2^16 comm comp"](./cuda_odd_even/cuda_odd_even_graph/65536_comm_comp.png)
+!["2^18 comm comp"](./cuda_odd_even/cuda_odd_even_graph/262144_comm_comp.png)
+!["2^20 comm comp"](./cuda_odd_even/cuda_odd_even_graph/1048576_comm_comp.png)
+!["2^22 comm comp"](./cuda_odd_even/cuda_odd_even_graph/4194304_comm_comp.png)
+
+From looking at the distribution between the between the time spent doing computation and communication, we can see that the CUDA implemenation of odd even sort spends a majority of time doing computation. For larger problem sizes, the computation time decreases then plateaus with the use of more threads. Regardless of problem size, the communication times remain constant regardless of the number of threads. With the communication on the CPU taking longer than the GPU, however with the larger problem sizes, the difference between the communication time on the CPU and GPU decreases.
+
+!["2^16 cpu gpu"](./cuda_odd_even/cuda_odd_even_graph/65536_main.png)
+!["2^18 cpu gpu"](./cuda_odd_even/cuda_odd_even_graph/262144_main.png)
+!["2^20 cpu gpu"](./cuda_odd_even/cuda_odd_even_graph/1048576_main.png)
+!["2^22 cpu gpu"](./cuda_odd_even/cuda_odd_even_graph/4194304_main.png)
+
+From the distributation of time spent on the CPU and GPU, we can gather that a majority of the time is spent on the CPU side. This dominance of the CPU in the run time is understandable as the CPU has to communicate with the GPU then wait for the GPU to perform computations for sorting then communicate the values back. For larger problem sizes, $2^{18}$ and above, we see that with more threads the GPU gains a decreased runtime, which in turn also leads to a decrease CPU runtime. Hoever for the smallest problem size, there appears to not be enough operations to satisfy the GPU to cause a decrease in runtime with the use of more threads.
 
 ## 6. Final Report
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
