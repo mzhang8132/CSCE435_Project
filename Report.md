@@ -506,7 +506,7 @@ Analyzing the communication vs. computation graphs we can see that computation c
 
 !["cuda bitonic strong scaling"](./cuda_bitonic/cuda_bitonic_graph/strong_scaling.png)
 
-In the smaller problem sizes, we see that as the thread count increrases, performance increases up to about the $2^{8}$ point. In the larget problem sizes, the performance increases futher to around the $2^{9}$ point.Generally speaking, the program scales well as the thread count increases with constant problem sizes. Additionally, it should be noted that the random input type generally performs much worse than the other input types.
+In the smaller problem sizes, we see that as the thread count increases, performance increases up to about the $2^{8}$ point. In the larget problem sizes, the performance increases futher to around the $2^{9}$ point.Generally speaking, the program scales well as the thread count increases with constant problem sizes. Additionally, it should be noted that the random input type generally performs much worse than the other input types.
 
 !["cuda bitonic strong scaling speedup"](./cuda_bitonic/cuda_bitonic_graph/strong_scaling_speedup.png)
 
