@@ -410,91 +410,6 @@ perform runs that invoke algorithm2 for Sorted, ReverseSorted, and Random data).
 `Intel top-down`: For your CPU-only experiments on the scale of a single node, you should
 generate additional performance data, measuring the hardware counters on the CPU. This can be done by adding `topdown.all` to the `spot()` options in the `CALI_CONFIG` in your jobfile.
 
-**MPI Merge Sort**
-
-!["65536 main mpi merge"](./mpi_merge/Plots-MPI/65536_main.png)
-!["262144 main mpi merge"](./mpi_merge/Plots-MPI/262144_main.png)
-!["1048576 main mpi merge"](./mpi_merge/Plots-MPI/1048576_main.png)
-!["4194304 main mpi merge"](./mpi_merge/Plots-MPI/4194304_main.png)
-!["16777216 main mpi merge"](./mpi_merge/Plots-MPI/16777216_main.png)
-!["67108864 main mpi merge"](./mpi_merge/Plots-MPI/67108864_main.png)
-!["268435456 main mpi merge"](./mpi_merge/Plots-MPI/268435456_main.png)
-
-We can observe that with a fixed problems size, and increasing number of threads, the runtime also lineraly increases, suggesting that our MPI implementation of merge sort does not scale well in terms of strong scaling.
-
-**CUDA Merge Sort**
-
-!["65536 main CUDA merge"](./cuda-merge/Plots-CUDA/65536_main.png)
-!["262144 main CUDA merge"](./cuda-merge/Plots-CUDA/262144_main.png)
-!["1048576 main CUDA merge"](./cuda-merge/Plots-CUDA/1048576_main.png)
-!["4194304 main CUDA merge"](./cuda-merge/Plots-CUDA/4194304_main.png)
-!["16777216 main CUDA merge"](./cuda-merge/Plots-CUDA/16777216_main.png)
-!["67108864 main CUDA merge"](./cuda-merge/Plots-CUDA/67108864_main.png)
-!["268435456 main CUDA merge"](./cuda-merge/Plots-CUDA/268435456_main.png)
-
-This data appears to be missing the GPU data collection, which likely means that we will need to look into re-collecting the data and plotting that data to make correct inferences about the merge sort CUDA implementation
-
-**MPI Quick Sort**
-!["65536 main mpi quicksort](./mpi_quicksort/mpi_quicksort_graphs/65536_main.png)
-!["262144 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/262144_main.png)
-!["1048576 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/1048576_main.png)
-!["4194304 main mpi quicksort"](./mpi_quicksort/mpi_quicksort_graphs/4194304_main.png)
-
-By the time I was able to get my MPI to stop hanging and generate the cali files, I got a few out-of-memory errors. I dropped the nodes, the core nodes, and lowered the memory, and was able to generate a few cali files However, after some time, I only got errors that indicated some of the nodes were killed off so I went with what I had. Based on the graph, it is hard to say what is happening in terms of performance. In graph 4194304, we can see that as the number of threads increases, the time increases as well, which means the parallelism is not constructed quite correctly and needs further work.
-
-**CUDA Quick Sort**
-!["65536 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/65536_main.png)
-!["262144 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/262144_main.png)
-!["1048576 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/1048576_main.png)
-!["4194304 main cuda quicksort"](./cuda-quicksort/cuda_quicksort_graph/4194304_main.png)
-
-Based on the graphs, we can observe that GPU is finishing faster compared to the CPU. Thus meaning that data initialization correctness check and some of the communications are bottlenecks. When it comes to a larger dataset num_val of 2^20, the gap in performance is narrower. This means that GPU's parallelism is being offset by the increased cost of operations, especially given that it was timed out after 2^20 num_vals. We can also see the irregularities in performance across different types of input data.
-
-**MPI Bitonic Sort**
-
-!["65536 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/65536_main.png)
-!["262144 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/262144_main.png)
-!["1048576 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/1048576_main.png)
-!["4194304 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/4194304_main.png)
-!["16777216 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/16777216_main.png)
-!["67108864 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/67108864_main.png)
-!["268435456 main mpi bitonic"](./mpi_bitonic/mpi_bitonic_graph/268435456_main.png)
-
-When the problem size is fixed, we can see that with more threads the run time increases in a linear fashion. The only consistent exception is for the 256 thread count, which improves performance slightly. This suggests that the optimal thread scaling for this implementation exists somewhere close to the 256 thread count.
-
-**CUDA Bitonic Sort**
-
-!["65536 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/65536_main.png)
-!["262144 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/262144_main.png)
-!["1048576 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/1048576_main.png)
-!["4194304 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/4194304_main.png)
-!["16777216 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/16777216_main.png)
-!["67108864 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/67108864_main.png)
-!["268435456 main cuda bitonic"](./cuda_bitonic/cuda_bitonic_graph/268435456_main.png)
-
-With a fixed problem size, we can observe an increase in peformance as we increase the thread count. The optimal thread count seems to be close to the 512 thread count. It seems that this is the value that best saturates the GPU, overshadowing the overhead required to execute it. This behavior would suggest good strong scaling.
-
-**MPI Odd Even Sort**
-
-!["65536 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/65536_main.png)
-!["262144 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/262144_main.png)
-!["1048576 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/1048576_main.png)
-!["4194304 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/4194304_main.png)
-!["16777216 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/16777216_main.png)
-!["67108864 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/67108864_main.png)
-!["268435456 main mpi odd even"](./mpi_odd_even/mpi_odd_even_graph/268435456_main.png)
-
-In terms of the problem size being fixed, we can see that with more threads the run time increases in a linear fashion. This suggests that the MPI implementation of odd even does not scale well in terms of strong scaling.
-
-**CUDA Odd Even Sort**
-
-!["65536 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/65536_main.png)
-!["262144 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/262144_main.png)
-!["1048576 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/1048576_main.png)
-!["4194304 main cuda odd even"](./cuda_odd_even/cuda_odd_even_graph/4194304_main.png)
-
-In terms of the problem size being fixed, we can see that with more threads the run time decreases exponentially down to a limit. This suggests that the CUDA implementation of odd even scales well in terms of strong scaling. The only instance that this does not occur is for an input size of 65536. This is because the input size was not big enough to saturate the GPU in order for the performance gain of the GPU to offset the overhead of parralizing the program on the GPU (communication to and from the GPU).
-
 ## 5. Presentation
 
 Plots for the presentation should be as follows:
@@ -506,7 +421,57 @@ Plots for the presentation should be as follows:
 
 Analyze these plots and choose a subset to present and explain in your presentation.
 
+**MPI Merge Sort**
 
+
+
+**CUDA Merge Sort**
+
+
+
+**MPI Quick Sort**
+
+
+
+**CUDA Quick Sort**
+
+
+
+**MPI Bitonic Sort**
+
+
+
+**CUDA Bitonic Sort**
+
+
+
+**MPI Odd Even Sort**
+
+!["mpi odd even strong scaling"](./mpi_odd_even/mpi_odd_even_graph/strong_scaling.png)
+
+From the strong scaling plots for the MPI implementation of odd even sort, we can see that for extremely large problem size, $2^{26}$ and above we see a decrease in the runtime with use of more threads. However this descrease in run time plateus and changes to be an increase in run time after $2^6$ threads. This is more than likely caused by the problem size not being big enough for the parallelization benefits of using more threads to outweigh the overhead of parallelization to include cost of communication among all the threads. For smaller problem sizes, the use of more threads leads to an increase in run time rather than a decrease because the overhead cost of parallelization and communication costs among all the threads outweigh the performance increase associated with the use of more threads.
+
+!["mpi odd even strong scaling speedup"](./mpi_odd_even/mpi_odd_even_graph/strong_scaling_speedup.png)
+
+In terms of strong scaling speedup we can see that the MPI implementation of odd even sort receives predominantly has an increased speedup for more threads for larger problem size like $2^{26}$ and $2^{28}$, that will also decrease for larger number of threads. For smaller problem size the speedup associated with the use of more threads is not present and instead the increase number of threads caused a decreasing speedup. This is reflective of the information gathered from the strong scaling plots as for smaller problem size the use of more threads causes an increase in runtime and for larger problem sizes there is a time decrease associated with more threads to a point before it begins to instead affect the run time performace negatively.
+
+!["mpi odd even weak scaling"](./mpi_odd_even/mpi_odd_even_graph/weak_scaling.png)
+
+For weak scaling, we can see that the MPI implementation of odd even sort appears to weak sort relatively well for 1024 jobs per thread for sorted and random input types as the ploted line is near horizontal. However for larger number of jobs and for the other input types the MPI odd even sort implementation does not scale well in terms of weak scaling as the lines are linearly increasing, rather than remaining constant/horizontal.
+
+!["mpi odd even comm comp"](./mpi_odd_even/mpi_odd_even_graph/comm_comp.png)
+
+From the graphs on the time distribution spent in communication and computation, we can see that the program predominantly spends time doing computation rather than communication. The computation times and communication times for smaller problem sizes increase with the use of more threads, while for larger input types, the communication times appear to remain relatively constant, while the computation times decrease then plateau with the use of more threads.
+
+**CUDA Odd Even Sort**
+
+!["cuda odd even strong scaling"](./cuda_odd_even/cuda_odd_even_graph/strong_scaling.png)
+
+From the strong scaling plots for the CUDA implementation of odd even sort, we can see that for larger problem sizes, $2^{18}$ and above we see a significant decrease in runtime with the use of more threads. However this decrease in run time plateus and changes to be an increase in run time after $2^8$ threads. This is more than likely caused by the problem size not being big enough for the parallelization benefits of using more threads to outweigh the overhead of parallelization. In addition for smaller problem sizes like $2^{16}$, the run times appear to be random/erraneous because the problem size is too small to see any significant time benefits with paralleization as the overhead outweighs a majority of the benefits.
+
+!["cuda odd even strong scaling speedup"](./cuda_odd_even/cuda_odd_even_graph/strong_scaling_speedup.png)
+
+!["cuda odd even weak scaling"](./cuda_odd_even/cuda_odd_even_graph/weak_scaling.png)
 
 ## 6. Final Report
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
