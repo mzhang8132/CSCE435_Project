@@ -86,7 +86,7 @@ __global__ void bitonic_sort_step(float *dev_values, int j, int k)
  */
 void bitonic_sort(float *values)
 {
-  CALI_CXX_MARK_FUNCTION;
+  // CALI_CXX_MARK_FUNCTION;
   float *dev_values;
   size_t size = NUM_VALS * sizeof(float);
 
@@ -175,13 +175,13 @@ int main(int argc, char *argv[])
   array_fill(values, NUM_VALS, OPTION);
   CALI_MARK_END("data_init");
 
-  CALI_MARK_BEGIN("comp");
-  CALI_MARK_BEGIN("comp_large");
+  // CALI_MARK_BEGIN("comp");
+  // CALI_MARK_BEGIN("comp_large");
 
   bitonic_sort(values); /* Inplace */
 
-  CALI_MARK_END("comp_large");
-  CALI_MARK_END("comp");
+  // CALI_MARK_END("comp_large");
+  // CALI_MARK_END("comp");
 
   CALI_MARK_BEGIN("correctness_check");
   int correctness = isSorted(values, NUM_VALS);
